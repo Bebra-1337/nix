@@ -6,12 +6,12 @@ local mod = "SUPER"
 hl.bind(mod .. " + Return", hl.dsp.exec_cmd("uwsm app -- kitty"))
 hl.bind(mod .. " + E",      hl.dsp.exec_cmd("uwsm app -- thunar"))
 hl.bind(mod .. " + B",      hl.dsp.exec_cmd("uwsm app -- vivaldi"))
-hl.bind(mod .. " + Space",  hl.dsp.exec_cmd("dms ipc call spotlight toggle"))
+hl.bind(mod .. " + Space",  hl.dsp.exec_cmd("noctalia-shell ipc call launcher toggle"))
 
--- ── DMS IPC ──
-hl.bind(mod .. " + X",          hl.dsp.exec_cmd("dms ipc call powermenu toggle"))
-hl.bind(mod .. " + N",          hl.dsp.exec_cmd("dms ipc call notifications toggle"))
-hl.bind(mod .. " + SHIFT + C",  hl.dsp.exec_cmd("dms ipc call control-center toggle"))
+-- ── Noctalia IPC ──
+hl.bind(mod .. " + X",          hl.dsp.exec_cmd("noctalia-shell ipc call sessionMenu toggle"))
+hl.bind(mod .. " + N",          hl.dsp.exec_cmd("noctalia-shell ipc call controlCenter toggle"))
+hl.bind(mod .. " + SHIFT + C",  hl.dsp.exec_cmd("noctalia-shell ipc call controlCenter toggle"))
 
 -- ── Window management ──
 hl.bind(mod .. " + Q",          hl.dsp.window.close())
@@ -86,10 +86,10 @@ end)
 -- ── Clipboard ──
 hl.bind(mod .. " + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
 
--- ── Audio & Media via DMS IPC ──
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("dms ipc call audio increment"),  { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("dms ipc call audio decrement"),  { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("dms ipc call audio mute"), { locked = true })
-hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("dms ipc call mpris playPause"),  { locked = true })
-hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("dms ipc call mpris next"),        { locked = true })
-hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("dms ipc call mpris previous"),   { locked = true })
+-- ── Audio & Media via Noctalia IPC ──
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume increase"),  { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume decrease"),  { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("noctalia-shell ipc call volume muteOutput"), { locked = true })
+hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("noctalia-shell ipc call media playPause"),  { locked = true })
+hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("noctalia-shell ipc call media next"),        { locked = true })
+hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("noctalia-shell ipc call media previous"),   { locked = true })

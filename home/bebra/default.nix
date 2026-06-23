@@ -16,7 +16,6 @@ let
 in
 {
   imports = [
-    inputs.dms.homeModules.dank-material-shell
     ./hyprland.nix
     ./kitty.nix
     ./zsh.nix
@@ -31,22 +30,6 @@ in
 
   # Let home-manager manage itself
   programs.home-manager.enable = true;
-
-  # --- Dank Material Shell (DMS) ---
-  programs.dank-material-shell = {
-    enable = true;
-    systemd = {
-      enable = true;
-      restartIfChanged = true;
-    };
-    enableSystemMonitoring = true;
-    enableVPN = true;
-    enableDynamicTheming = true;
-    enableAudioWavelength = true;
-    enableCalendarEvents = true;
-    enableClipboardPaste = true;
-
-  };
 
   # --- Git ---
   programs.git = {
@@ -79,11 +62,19 @@ in
     VISUAL = "zed";
     TERMINAL = "kitty";
     BROWSER = "vivaldi";
+    # qt6ct используется Noctalia для теминга Qt-приложений
+    QT_QPA_PLATFORMTHEME = pkgs.lib.mkForce "qt6ct";
   };
 
   # --- GTK theming ---
+  # Noctalia управляет GTK-темой в runtime через свои шаблоны.
+  # HM задаёт базовый движок (adw-gtk3) и иконки — Noctalia пишет цвета поверх.
   gtk = {
     enable = true;
+    theme = {
+      name = "adw-gtk3";
+      package = pkgs.adw-gtk3;
+    };
     iconTheme = {
       package = yet-another-monochrome-icon-set;
       name = "yet-another-monochrome-icon-set";
@@ -97,7 +88,8 @@ in
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
+    # qt6ct используется Noctalia для Qt-теминга
+    platformTheme.name = "qt6ct";
   };
 
   # --- XDG dirs ---
@@ -107,5 +99,10 @@ in
       enable = true;
       createDirectories = true;
     };
+
+    # gtk-4.0/settings.ini: НЕ ставим force=true, чтобы Noctalia могла
+    # управлять этим файлом в runtime через свои шаблоны.
+    # Если нужно принудительно — раскомментировать:
+    # configFile."gtk-4.0/settings.ini".force = true;
   };
 }

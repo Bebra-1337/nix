@@ -4,9 +4,11 @@
   nixConfig = {
     extra-substituters = [
       "https://hyprland.cachix.org"
+      "https://noctalia.cachix.org"
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "noctalia.cachix.org-1:QLqKTBuOXLLr0wQlBOy3DkUjgZ1BNLvL/fDp6f+FMYY="
     ];
   };
 
@@ -26,11 +28,6 @@
     hyprland-plugins = {
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
-    };
-
-    dms = {
-      url = "github:AvengeMedia/DankMaterialShell/stable";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprcapture = {
@@ -53,6 +50,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
+            backupFileExtension = "backup";
             extraSpecialArgs = { inherit inputs; };
             sharedModules = [
               inputs.hyprland.homeManagerModules.default

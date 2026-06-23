@@ -37,6 +37,10 @@
       enable = true;
       enable32Bit = true;
     };
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
   };
 
   # --- Unfree packages ---
@@ -53,6 +57,7 @@
     xserver.enable = true;
     flatpak.enable = true;
     displayManager.ly.enable = true;
+    blueman.enable = true;
   };
 
   # --- PAM ---
@@ -163,6 +168,10 @@
     ffmpegthumbnailer
     poppler
     libgsf
+
+    # --- Noctalia Shell ---
+    # Установлен на системном уровне, не через home-manager
+    noctalia-shell
   ];
 
   # --- Nix settings ---
@@ -179,9 +188,11 @@
       ];
       extra-substituters = [
         "https://hyprland.cachix.org"
+        "https://noctalia.cachix.org"
       ];
       extra-trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        "noctalia.cachix.org-1:QLqKTBuOXLLr0wQlBOy3DkUjgZ1BNLvL/fDp6f+FMYY="
       ];
     };
     gc = {

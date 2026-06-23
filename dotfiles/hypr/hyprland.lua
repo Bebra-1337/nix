@@ -26,7 +26,7 @@ hl.monitor({ output = "DP-3", disabled = true })
 --  ENVIRONMENT
 -- -------------------------------------------------------
 hl.env("XCURSOR_SIZE",                    "24")
-hl.env("XCURSOR_THEME",                   "Bibata-Modern-Classic")
+hl.env("XCURSOR_THEME",                   "Bibata-Original-Ice")
 hl.env("HYPRCURSOR_SIZE",                 "24")
 hl.env("GBM_BACKEND",                     "nvidia-drm")
 hl.env("__GLX_VENDOR_LIBRARY_NAME",       "nvidia")
@@ -121,9 +121,10 @@ hl.animation({ leaf = "layers",      enabled = true, speed = 4,    bezier = "exp
 hl.animation({ leaf = "border",      enabled = true, speed = 10,   bezier = "default"     })
 
 -- -------------------------------------------------------
---  DMS LAYER BLUR
+--  NOCTALIA LAYER BLUR
 -- -------------------------------------------------------
-hl.layer_rule({ match = { namespace = "dms:.*" }, blur = true, blur_popups = true, ignore_alpha = 0.5 })
+-- Blur для фона баров и панелей Noctalia
+hl.layer_rule({ match = { namespace = "noctalia-background-.*" }, blur = true, blur_popups = true, ignore_alpha = 0.5 })
 
 -- -------------------------------------------------------
 --  WINDOW RULES
