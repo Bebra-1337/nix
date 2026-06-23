@@ -74,6 +74,13 @@
     imv                   # image viewer (Wayland native)
     obs-studio
     telegram-desktop
+
+    # --- Theme engines & GUI Tools ---
+    nwg-look
+    libsForQt5.qt5ct
+    kdePackages.qt6ct
+    libsForQt5.qtstyleplugin-kvantum
+    kdePackages.qtstyleplugin-kvantum
   ];
 
   # Thunar as default file manager

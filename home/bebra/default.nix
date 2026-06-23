@@ -45,10 +45,7 @@ in
     enableAudioWavelength = true;
     enableCalendarEvents = true;
     enableClipboardPaste = true;
-    settings = {
-      theme = "dark";
-      dynamicTheming = true;
-    };
+
   };
 
   # --- Git ---
