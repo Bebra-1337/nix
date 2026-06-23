@@ -7,6 +7,7 @@
     ../../modules/system/audio.nix
     ../../modules/system/gaming.nix
     ../../modules/system/locale.nix
+    ../../modules/system/kinect-watchdog/kinect-watchdog.nix
   ];
 
   # --- Boot ---
@@ -80,6 +81,7 @@
       "audio"
       "video"
       "input"
+      "plugdev"
     ];
   };
 
@@ -161,7 +163,6 @@
     ffmpegthumbnailer
     poppler
     libgsf
-    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # --- Nix settings ---
@@ -178,11 +179,9 @@
       ];
       extra-substituters = [
         "https://hyprland.cachix.org"
-        "https://noctalia.cachix.org"
       ];
       extra-trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-        "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
       ];
     };
     gc = {

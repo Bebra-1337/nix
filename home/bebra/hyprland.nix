@@ -2,15 +2,56 @@
   inputs,
   pkgs,
   config,
+  lib,
   ...
 }:
+let
+  hyprcapture = pkgs.hyprlandPlugins.mkHyprlandPlugin {
+    pluginName = "hyprcapture";
+    version = "0.2.3";
+    src = inputs.hyprcapture;
+    hyprland = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+
+    nativeBuildInputs = [
+      pkgs.cmake
+      pkgs.pkg-config
+      pkgs.qt6.wrapQtAppsHook
+    ];
+
+    buildInputs = [
+      pkgs.glib
+      pkgs.lua5_4
+      pkgs.qt6.qtbase
+      pkgs.qt6.qtsvg
+      pkgs.kdePackages.layer-shell-qt
+      pkgs.nlohmann_json
+    ];
+
+    postInstall = ''
+      mkdir -p $out/bin
+      cp hyprcapture-ui $out/bin/
+    '';
+
+    meta = {};
+  };
+in
 {
   wayland.windowManager.hyprland = {
     enable = true;
     package = null;
     portalPackage = null;
     systemd.enable = false;
-    extraLuaFiles = { "bebra.lua" = ../../dotfiles/hypr/hyprland.lua; };
+    extraLuaFiles = {
+      "bebra.lua" = ../../dotfiles/hypr/hyprland.lua;
+      "autostart.lua" = ../../dotfiles/hypr/autostart.lua;
+      "keybinds.lua" = ../../dotfiles/hypr/keybinds.lua;
+      "hyprcapture_path.lua" = pkgs.writeText "hyprcapture_path.lua" ''
+        return {
+          so = "${hyprcapture}/lib/libhyprcapture.so",
+          ui = "${config.home.homeDirectory}/.local/bin/hyprcapture-ui"
+        }
+      '';
+    };
   };
 
   # UWSM: export home-manager session variables into the compositor environment
@@ -18,6 +59,8 @@
     "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
 
   home.packages = with pkgs; [
+    hyprcapture
+
     # Launchers / UI
     rofi
     libnotify # notify-send CLI
@@ -70,9 +113,9 @@
   # xdg.configFile."hypr/hyprland.lua".source = ../../dotfiles/hypr/hyprland.lua;
   # xdg.configFile."hypr/autostart.lua".source = ../../dotfiles/hypr/autostart.lua;
   # xdg.configFile."hypr/keybinds.lua".source = ../../dotfiles/hypr/keybinds.lua;
-  # xdg.configFile."hypr/hyprlock.conf".source = ../../dotfiles/hypr/hyprlock.conf;
-  # xdg.configFile."hypr/hypridle.conf".source = ../../dotfiles/hypr/hypridle.conf;
-  # xdg.configFile."hypr/hyprpaper.conf".source = ../../dotfiles/hypr/hyprpaper.conf;
+  xdg.configFile."hypr/hyprlock.conf".source = ../../dotfiles/hypr/hyprlock.conf;
+  xdg.configFile."hypr/hypridle.conf".source = ../../dotfiles/hypr/hypridle.conf;
+  xdg.configFile."hypr/hyprpaper.conf".source = ../../dotfiles/hypr/hyprpaper.conf;
 
   # systemd user services under UWSM
   services.hypridle.enable = true;
@@ -92,19 +135,14 @@
     Install.WantedBy = [ "graphical-session.target" ];
   };
 
-  # noctalia-shell as systemd user service
-  systemd.user.services.noctalia-shell = {
-    Unit = {
-      Description = "Noctalia Shell";
-      After = [ "graphical-session.target" ];
-      PartOf = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = "noctalia-shell";
-      Restart = "on-failure";
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
-  };
-
   fonts.fontconfig.enable = true;
+
+  home.activation = {
+    copyHyprCaptureUI = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      mkdir -p $HOME/.local/bin
+      rm -f $HOME/.local/bin/hyprcapture-ui
+      cp -f ${hyprcapture}/bin/hyprcapture-ui $HOME/.local/bin/hyprcapture-ui
+      chmod +x $HOME/.local/bin/hyprcapture-ui
+    '';
+  };
 }

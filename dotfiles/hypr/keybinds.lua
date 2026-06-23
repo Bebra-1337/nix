@@ -6,18 +6,18 @@ local mod = "SUPER"
 hl.bind(mod .. " + Return", hl.dsp.exec_cmd("uwsm app -- kitty"))
 hl.bind(mod .. " + E",      hl.dsp.exec_cmd("uwsm app -- thunar"))
 hl.bind(mod .. " + B",      hl.dsp.exec_cmd("uwsm app -- vivaldi"))
-hl.bind(mod .. " + Space",  hl.dsp.exec_cmd("noctalia-shell ipc call launcher toggle"))
+hl.bind(mod .. " + Space",  hl.dsp.exec_cmd("dms ipc call spotlight toggle"))
 
--- ── Noctalia IPC ──
-hl.bind(mod .. " + X",          hl.dsp.exec_cmd("noctalia-shell ipc call sessionMenu toggle"))
-hl.bind(mod .. " + N",          hl.dsp.exec_cmd("noctalia-shell ipc call notifications toggle"))
-hl.bind(mod .. " + SHIFT + C",  hl.dsp.exec_cmd("noctalia-shell ipc call controlCenter toggle"))
+-- ── DMS IPC ──
+hl.bind(mod .. " + X",          hl.dsp.exec_cmd("dms ipc call powermenu toggle"))
+hl.bind(mod .. " + N",          hl.dsp.exec_cmd("dms ipc call notifications toggle"))
+hl.bind(mod .. " + SHIFT + C",  hl.dsp.exec_cmd("dms ipc call control-center toggle"))
 
 -- ── Window management ──
 hl.bind(mod .. " + Q",          hl.dsp.window.close())
 hl.bind(mod .. " + SHIFT + F",  hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mod .. " + F",          hl.dsp.window.fullscreen())
-hl.bind(mod .. " + P",          hl.dsp.window.pseudo())
+-- hl.bind(mod .. " + P",          hl.dsp.window.pseudo())
 hl.bind(mod .. " + J",          hl.dsp.layout("togglesplit"))
 
 -- ── Focus ──
@@ -60,17 +60,36 @@ hl.bind(mod .. " + mouse:273",   hl.dsp.window.resize(), { mouse = true })
 
 -- ── Screenshots (HyprCapture plugin — install via hyprpm) ──
 -- hyprpm add https://github.com/gfhdhytghd/HyprCapture && hyprpm enable hyprcapture
-hl.bind("Print",                   hl.dsp.exec_cmd("hyprctl dispatch hyprcapture region"))
-hl.bind(mod .. " + Print",         hl.dsp.exec_cmd("hyprctl dispatch hyprcapture window"))
-hl.bind(mod .. " + SHIFT + Print", hl.dsp.exec_cmd("hyprctl dispatch hyprcapture fullscreen"))
+hl.bind(mod .. " + P", function()
+    if hl.plugin and hl.plugin.hyprcapture then
+        hl.plugin.hyprcapture.open("region")
+    else
+        hl.exec_cmd("notify-send 'HyprCapture' 'Plugin not loaded yet'")
+    end
+end)
+hl.bind(mod .. " + SHIFT + P", function()
+    if hl.plugin and hl.plugin.hyprcapture then
+        hl.plugin.hyprcapture.open("window")
+    else
+        hl.exec_cmd("notify-send 'HyprCapture' 'Plugin not loaded yet'")
+    end
+end)
+hl.bind(mod .. " + CTRL + P", function()
+    if hl.plugin and hl.plugin.hyprcapture then
+        hl.plugin.hyprcapture.open("fullscreen")
+    else
+        hl.exec_cmd("notify-send 'HyprCapture' 'Plugin not loaded yet'")
+    end
+end)
+
 
 -- ── Clipboard ──
 hl.bind(mod .. " + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
 
--- ── Audio via Noctalia IPC ──
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume increase"),  { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume decrease"),  { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("noctalia-shell ipc call volume muteOutput"), { locked = true })
-hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("noctalia-shell ipc call media playPause"),  { locked = true })
-hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("noctalia-shell ipc call media next"),        { locked = true })
-hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("noctalia-shell ipc call media previous"),   { locked = true })
+-- ── Audio & Media via DMS IPC ──
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("dms ipc call audio increment"),  { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("dms ipc call audio decrement"),  { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("dms ipc call audio mute"), { locked = true })
+hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("dms ipc call mpris playPause"),  { locked = true })
+hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("dms ipc call mpris next"),        { locked = true })
+hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("dms ipc call mpris previous"),   { locked = true })

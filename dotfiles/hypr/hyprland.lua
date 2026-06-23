@@ -1,14 +1,26 @@
 -- BEBRA-PC Hyprland config (Hyprland >= 0.55, Lua config)
 -- https://wiki.hypr.land/Configuring/Start/
 
+local ok, hyprcapture = pcall(require, "hyprcapture_path")
+if ok and hl.plugin and hl.plugin.hyprcapture then
+    hl.config({
+        plugin = {
+            hyprcapture = {
+                helper = hyprcapture.ui
+            }
+        }
+    })
+end
+
 require("autostart")
 require("keybinds")
+
 
 -- -------------------------------------------------------
 --  MONITORS
 -- -------------------------------------------------------
-hl.monitor({ output = "DP-2", mode = "1920x1080@180",  position = { 0,    0 }, scale = 1 })
-hl.monitor({ output = "DP-3", mode = "1920x1080@75",   position = { 1920, 0 }, scale = 1 })
+hl.monitor({ output = "DP-2", mode = "1920x1080@180",  position = "0x0", scale = 1 })
+hl.monitor({ output = "DP-3", disabled = true })
 
 -- -------------------------------------------------------
 --  ENVIRONMENT
@@ -82,7 +94,6 @@ hl.config({
     misc = {
         force_default_wallpaper  = 0,
         disable_hyprland_logo    = true,
-        vfr                      = true,
         vrr                      = 1,
         mouse_move_enables_dpms  = true,
         key_press_enables_dpms   = true,
@@ -110,9 +121,9 @@ hl.animation({ leaf = "layers",      enabled = true, speed = 4,    bezier = "exp
 hl.animation({ leaf = "border",      enabled = true, speed = 10,   bezier = "default"     })
 
 -- -------------------------------------------------------
---  NOCTALIA LAYER BLUR
+--  DMS LAYER BLUR
 -- -------------------------------------------------------
-hl.layer_rule({ match = { namespace = "noctalia-background-.*" }, blur = true, blur_popups = true, ignore_alpha = 0.5 })
+hl.layer_rule({ match = { namespace = "dms:.*" }, blur = true, blur_popups = true, ignore_alpha = 0.5 })
 
 -- -------------------------------------------------------
 --  WINDOW RULES

@@ -26,7 +26,7 @@
     # --- IDE / Editors ---
     zed-editor
     qtcreator
-
+    antigravity-cli
     # --- C/C++/Qt development ---
     gcc
     clang-tools          # clangd, clang-tidy, clang-format

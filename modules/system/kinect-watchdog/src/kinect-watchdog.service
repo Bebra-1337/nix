@@ -1,0 +1,12 @@
+[Unit]
+Description=Kinect V1 Watchdog (tilt + LED control)
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/kinect-watchdog
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
