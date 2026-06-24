@@ -20,6 +20,7 @@ in
     ./kitty.nix
     ./zsh.nix
     ./apps.nix
+    ./matugen.nix
   ];
 
   home = {
@@ -72,7 +73,7 @@ in
   gtk = {
     enable = true;
     theme = {
-      name = "adw-gtk3";
+      name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
     };
     iconTheme = {
@@ -83,6 +84,12 @@ in
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Classic";
       size = 24;
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
     };
   };
 

@@ -3,15 +3,10 @@
 local mod = "SUPER"
 
 -- ── Apps ──
-hl.bind(mod .. " + Return", hl.dsp.exec_cmd("uwsm app -- kitty"))
+hl.bind(mod .. " + T",      hl.dsp.exec_cmd("uwsm app -- kitty"))
 hl.bind(mod .. " + E",      hl.dsp.exec_cmd("uwsm app -- thunar"))
 hl.bind(mod .. " + B",      hl.dsp.exec_cmd("uwsm app -- vivaldi"))
-hl.bind(mod .. " + Space",  hl.dsp.exec_cmd("noctalia-shell ipc call launcher toggle"))
-
--- ── Noctalia IPC ──
-hl.bind(mod .. " + X",          hl.dsp.exec_cmd("noctalia-shell ipc call sessionMenu toggle"))
-hl.bind(mod .. " + N",          hl.dsp.exec_cmd("noctalia-shell ipc call controlCenter toggle"))
-hl.bind(mod .. " + SHIFT + C",  hl.dsp.exec_cmd("noctalia-shell ipc call controlCenter toggle"))
+hl.bind(mod .. " + A",      hl.dsp.exec_cmd("rofi -show drun"))
 
 -- ── Window management ──
 hl.bind(mod .. " + Q",          hl.dsp.window.close())
@@ -86,10 +81,10 @@ end)
 -- ── Clipboard ──
 hl.bind(mod .. " + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
 
--- ── Audio & Media via Noctalia IPC ──
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume increase"),  { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("noctalia-shell ipc call volume decrease"),  { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("noctalia-shell ipc call volume muteOutput"), { locked = true })
-hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("noctalia-shell ipc call media playPause"),  { locked = true })
-hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("noctalia-shell ipc call media next"),        { locked = true })
-hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("noctalia-shell ipc call media previous"),   { locked = true })
+-- ── Audio & Media ──
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"),  { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),  { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
+hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("playerctl play-pause"),  { locked = true })
+hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("playerctl next"),        { locked = true })
+hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("playerctl previous"),   { locked = true })

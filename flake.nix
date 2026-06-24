@@ -34,15 +34,33 @@
       url = "github:gfhdhytghd/HyprCapture";
       flake = false;
     };
+
+    bettersoundcloud = {
+      url = "github:AlirezaKJ/BetterSoundCloud";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, bettersoundcloud, ... }:
   let
     system = "x86_64-linux";
+
+    # Оверлей: патчим BetterSoundCloud — заменяем icon.ico на PNG для Linux-трея
+    bettersoundcloudOverlay = final: prev: {
+      bettersoundcloud = bettersoundcloud.packages.${system}.default.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          substituteInPlace main.js \
+            --replace-quiet "app/lib/assets/icon.ico" \
+                            "$out/lib/node_modules/bettersoundcloud/app/lib/assets/sc-icon-nobg.png"
+        '';
+      });
+    };
+
     mkSystem = nixosModule: homeModule: nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = { inherit inputs; };
       modules = [
+        { nixpkgs.overlays = [ bettersoundcloudOverlay ]; }
         ./hosts/BEBRA-PC/configuration.nix
         nixosModule
         home-manager.nixosModules.home-manager

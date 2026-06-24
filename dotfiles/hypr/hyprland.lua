@@ -1,6 +1,7 @@
 -- BEBRA-PC Hyprland config (Hyprland >= 0.55, Lua config)
 -- https://wiki.hypr.land/Configuring/Start/
 
+local colors_ok, colors = pcall(require, "hyprland-colors")
 local ok, hyprcapture = pcall(require, "hyprcapture_path")
 if ok and hl.plugin and hl.plugin.hyprcapture then
     hl.config({
@@ -45,8 +46,8 @@ hl.config({
         gaps_out = 10,
         border_size = 2,
         col = {
-            active_border   = "rgba(cdd6f4ff)",
-            inactive_border = "rgba(313244aa)",
+            active_border   = colors_ok and ("rgba(" .. string.sub(colors.primary, 5) .. "ff)") or "rgba(cdd6f4ff)",
+            inactive_border = colors_ok and ("rgba(" .. string.sub(colors.surface, 5) .. "ff)") or "rgba(313244aa)",
         },
         layout = "dwindle",
         resize_on_border = true,

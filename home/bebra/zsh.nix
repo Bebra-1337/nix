@@ -111,8 +111,8 @@
     enableZshIntegration = true;
   };
 
-  # Link the native starship.toml (home-manager won't overwrite it if we use xdg.configFile)
-  xdg.configFile."starship.toml".source = ../../dotfiles/starship.toml;
+  # Link the native starship.toml (managed by Matugen to allow dynamic color updates)
+  # xdg.configFile."starship.toml".source = ../../dotfiles/starship.toml;
 
   # --- Tools used in aliases ---
   home.packages = with pkgs; [

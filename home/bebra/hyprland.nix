@@ -64,6 +64,8 @@ in
     # Launchers / UI
     rofi
     libnotify # notify-send CLI
+    matugen
+    zip
 
     # Polkit (Hypr ecosystem)
     hyprpolkitagent
@@ -81,6 +83,7 @@ in
 
     # Audio control (replaces pavucontrol)
     hyprpwcenter
+    playerctl
 
     # Idle / lock
     hypridle

@@ -1,0 +1,277 @@
+[config]
+# Default config options for Matugen
+
+[templates.alacritty]
+input_path = '~/.config/matugen/templates/alacritty.toml'
+output_path = '~/.config/alacritty/colors.toml'
+
+[templates.btop]
+input_path = '~/.config/matugen/templates/btop.theme'
+output_path = '~/.config/btop/themes/matugen.theme'
+post_hook = 'pkill -USR2 btop || true'
+
+[templates.cava]
+input_path = '~/.config/matugen/templates/cava-colors.ini'
+output_path = '~/.config/cava/themes/matugen.ini'
+post_hook = 'pkill -USR1 cava || true'
+
+[templates.clipse]
+input_path = '~/.config/matugen/templates/clipse_theme.json'
+output_path = '~/.config/clipse/custom_theme.json'
+
+[templates.dunst]
+input_path = '~/.config/matugen/templates/dunstrc-colors'
+output_path = '~/.config/dunst/dunstrc'
+post_hook = 'dunstctl reload || true'
+
+[templates.fuzzel]
+input_path = '~/.config/matugen/templates/fuzzel.ini'
+output_path = '~/.config/fuzzel/colors.ini'
+
+[templates.ghostty]
+input_path = '~/.config/matugen/templates/ghostty'
+output_path = '~/.config/ghostty/themes/Matugen'
+post_hook = 'pkill -SIGUSR2 ghostty || true'
+
+[templates.gnome-shell]
+input_path = '~/.config/matugen/templates/gnome-shell.css'
+output_path = '~/.config/gnome-shell/gnome-shell.css'
+
+[templates.gtk3]
+input_path = '~/.config/matugen/templates/gtk-colors.css'
+output_path = '~/.config/gtk-3.0/colors.css'
+
+[templates.gtk4]
+input_path = '~/.config/matugen/templates/gtk-colors.css'
+output_path = '~/.config/gtk-4.0/colors.css'
+
+[templates.helix]
+input_path = '~/.config/matugen/templates/helix.toml'
+output_path = '~/.config/helix/runtime/themes/matugen.toml'
+
+[templates.heroic]
+input_path = '~/.config/matugen/templates/heroic.css'
+output_path = '~/.config/heroic/themes/matugen.css'
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/hyprland-colors.conf'
+
+[templates.hyprland-lua]
+input_path = '~/.config/matugen/templates/hyprland-colors.lua'
+output_path = '~/.config/hypr/hyprland-colors.lua'
+
+[templates.hyprwat]
+input_path = '~/.config/matugen/templates/hyprwat-colors.toml'
+output_path = '~/.config/hyprwat/hyprwat-colors.toml'
+
+[templates.kitty]
+input_path = '~/.config/matugen/templates/kitty-colors.conf'
+output_path = '~/.config/kitty/current-theme.conf'
+
+[templates.kvantum_kvconfig]
+input_path = '~/.config/matugen/templates/kvantum-colors.kvconfig'
+output_path = '~/.config/Kvantum/matugen/matugen.kvconfig'
+
+[templates.kvantum_svg]
+input_path = '~/.config/matugen/templates/kvantum-colors.svg'
+output_path = '~/.config/Kvantum/matugen/matugen.svg'
+
+[templates.labwc]
+input_path = '~/.config/matugen/templates/labwc'
+output_path = '~/.config/labwc/themerc-override'
+post_hook = 'labwc -reload || true'
+
+[templates.mako]
+input_path = '~/.config/matugen/templates/mako'
+output_path = '~/.config/mako/mako-colors'
+post_hook = 'makoctl reload || true'
+
+[templates.mcfly]
+input_path = '~/.config/matugen/templates/mcfly.toml'
+output_path = '~/.local/share/mcfly/config.toml'
+
+[templates.mango]
+input_path = '~/.config/matugen/templates/mango.conf'
+output_path = '~/.config/mango/colors.conf'
+post_hook = 'mmsg -d reload_config || true'
+
+[templates.micro]
+input_path = '~/.config/matugen/templates/micro.micro'
+output_path = '~/.config/micro/colorschemes/matugen.micro'
+
+[templates.vesktop]
+input_path = '~/.config/matugen/templates/midnight-discord.css'
+output_path = '~/.config/vesktop/themes/midnight-discord.css'
+
+[templates.nvim]
+input_path = '~/.config/matugen/templates/nvim-colors.vim'
+output_path = '~/.config/nvim/colors/matugen.vim'
+post_hook = 'pkill -SIGUSR1 nvim || true'
+
+[templates.niri]
+input_path = '~/.config/matugen/templates/niri-colors.kdl'
+output_path = '~/.config/niri/colors.kdl'
+post_hook = 'niri msg action load-config-file || true'
+
+[templates.opencode]
+input_path = '~/.config/matugen/templates/opencode-colors.json'
+output_path = '~/.config/opencode/themes/matugen.json'
+
+[templates.papirus-folders]
+input_path = '~/.config/matugen/templates/papirus-color'
+output_path = '~/.config/matugen/papirus-color'
+colors_to_compare = [
+    { name = "black",      color = "#4f4f4f" },
+    { name = "blue",       color = "#5294e2" },
+    { name = "bluegrey",   color = "#607d8b" },
+    { name = "brown",      color = "#ae8e6c" },
+    { name = "carmine",    color = "#a30002" },
+    { name = "cyan",       color = "#00bcd4" },
+    { name = "darkcyan",   color = "#45abb7" },
+    { name = "deeporange", color = "#eb6637" },
+    { name = "green",      color = "#87b158" },
+    { name = "grey",       color = "#8e8e8e" },
+    { name = "indigo",     color = "#5c6bc0" },
+    { name = "magenta",    color = "#ca71df" },
+    { name = "nordic",     color = "#81a1c1" },
+    { name = "orange",     color = "#ee923a" },
+    { name = "palebrown",  color = "#d1bfae" },
+    { name = "paleorange", color = "#eeca8f" },
+    { name = "pink",       color = "#f06292" },
+    { name = "red",        color = "#e25252" },
+    { name = "teal",       color = "#16a085" },
+    { name = "violet",     color = "#7e57c2" },
+    { name = "white",      color = "#e4e4e4" },
+    { name = "yaru",       color = "#676767" },
+    { name = "yellow",     color = "#f9bd30" },
+]
+compare_to = "{{ colors.primary.default.hex }}"
+post_hook = 'sudo -n papirus-folders -C {{ closest_color }} -u || true'
+index = 1
+
+[templates.prismlauncher]
+input_path = '~/.config/matugen/templates/prismlauncher.json'
+output_path = '~/.local/share/PrismLauncher/themes/Matugen/theme.json'
+
+[templates.pywalfox]
+input_path = '~/.config/matugen/templates/pywalfox-colors.json'
+output_path = '~/.cache/wal/colors.json'
+post_hook = 'pywalfox update || true'
+
+[templates.qt5ct]
+input_path = '~/.config/matugen/templates/qtct-colors.conf'
+output_path = '~/.config/qt5ct/colors/matugen.conf'
+
+[templates.qt6ct]
+input_path = '~/.config/matugen/templates/qtct-colors.conf'
+output_path = '~/.config/qt6ct/colors/matugen.conf'
+
+[templates.color-scheme]
+input_path = '~/.config/matugen/templates/Matugen.colors'
+output_path = '~/.local/share/color-schemes/Matugen.colors'
+
+[templates.quickshell]
+input_path = '~/.config/matugen/templates/quickshell.json'
+output_path = '~/.local/state/quickshell/generated/colors.json'
+
+[templates.rmpc]
+input_path = '~/.config/matugen/templates/rmpc/rmpc.ron'
+output_path = '~/.config/rmpc/themes/matugen.ron'
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi-colors.rasi'
+output_path = '~/.config/rofi/colors.rasi'
+
+[templates.spotify]
+input_path = '~/.config/matugen/templates/spicetify.ini'
+output_path = '~/.config/spicetify/Themes/Sleek/color.ini'
+post_hook = 'spicetify watch -s 2>&1 | sed "/Reloaded Spotify/q" || true'
+
+[templates.starship]
+input_path = '~/.config/matugen/templates/starship.toml'
+output_path = '~/.config/starship.toml'
+
+[templates.sway]
+input_path = '~/.config/matugen/templates/sway-colors.conf'
+output_path = '~/.config/sway/colors.conf'
+post_hook = 'swaymsg reload || true'
+
+[templates.television]
+input_path = '~/.config/matugen/templates/television.toml'
+output_path = '~/.config/television/themes/matugen.toml'
+
+[templates.tmux]
+input_path = '~/.config/matugen/templates/tmux-colors.conf'
+output_path = '~/.config/tmux/generated.conf'
+post_hook = 'tmux source-file ~/.config/tmux/generated.conf || true'
+
+[templates.zellij]
+input_path = '~/.config/matugen/templates/zellij-theme.kdl.tera'
+output_path = '~/.config/zellij/themes/matugen.kdl'
+post_hook = 'touch ~/.config/zellij/config.kdl || true'
+
+[templates.vivaldi]
+input_path = '~/.config/matugen/templates/vivaldi.css'
+output_path = '~/.config/vivaldi/matugen.css'
+
+[templates.vscode-raw]
+input_path = '~/.config/matugen/templates/vscode-colors'
+output_path = '~/.cache/matugen/vscode-colors'
+
+[templates.vscode-json]
+input_path = '~/.config/matugen/templates/vscode-colors.json'
+output_path = '~/.cache/matugen/vscode-colors.json'
+
+[templates.wezterm]
+input_path = '~/.config/matugen/templates/wezterm_theme.toml'
+output_path = '~/.config/wezterm/colors/matugen_theme.toml'
+post_hook = 'touch ~/.config/wezterm/wezterm.lua || true'
+
+[templates.wine]
+input_path = '~/.config/matugen/templates/wine.reg'
+output_path = '/tmp/wine.reg'
+post_hook = 'wine regedit /tmp/wine.reg || true'
+
+[templates.yazi]
+input_path = '~/.config/matugen/templates/yazi-theme.toml'
+output_path = '~/.config/yazi/theme.toml'
+
+[templates.zathura]
+input_path = '~/.config/matugen/templates/zathura-colors'
+output_path = '~/.config/zathura/zathurarc'
+
+[templates.zed]
+input_path = '~/.config/matugen/templates/zed-colors.json'
+output_path = '~/.config/zed/themes/matugen.json'
+
+[templates.wofi]
+input_path = "~/.config/matugen/templates/colors.css"
+output_path = "~/.config/wofi/colors.css"
+
+[templates.swaync]
+input_path = "~/.config/matugen/templates/colors.css"
+output_path = "~/.config/swaync/colors.css"
+post_hook = "swaync-client -rs || true"
+
+[templates.steam]
+input_path = '~/.config/matugen/templates/steam.css'
+output_path = '~/.config/AdwSteamGtk/custom.css'
+post_hook = 'adwaita-steam-gtk -i || true'
+
+[templates.obs]
+input_path = '~/.config/matugen/templates/matugen.obt'
+output_path = '~/.config/obs-studio/themes/matugen.obt'
+
+[templates.telegram]
+input_path = '~/.config/matugen/templates/telegram.tdesktop-theme'
+output_path = '/tmp/colors.tdesktop-theme'
+post_hook = 'rm -f /home/bebra/nix/dotfiles/matugen/telegram.tdesktop-theme && nix-shell -p zip --run "zip -j -q /home/bebra/nix/dotfiles/matugen/telegram.tdesktop-theme /tmp/colors.tdesktop-theme" || true'
+
+[templates.firefox-website-colors]
+input_path = "~/.config/matugen/templates/firefox-colors.css"
+output_path = "~/.cache/matugen/firefox-colors.css"
+
+[templates.obsidian]
+input_path = '~/.config/matugen/templates/obsidian.css'
+output_path = '~/.cache/matugen/obsidian-matugen.css'

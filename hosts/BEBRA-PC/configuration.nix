@@ -169,9 +169,8 @@
     poppler
     libgsf
 
-    # --- Noctalia Shell ---
-    # Установлен на системном уровне, не через home-manager
-    noctalia-shell
+    # --- Wayle Shell ---
+    wayle
   ];
 
   # --- Nix settings ---

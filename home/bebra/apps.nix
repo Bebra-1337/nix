@@ -69,6 +69,9 @@
     gamemode
     gamescope
 
+    # --- Music ---
+    bettersoundcloud
+
     # --- Utilities ---
     mpv
     imv                   # image viewer (Wayland native)
