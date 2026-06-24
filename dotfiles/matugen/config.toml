@@ -61,6 +61,10 @@ output_path = '~/.config/hypr/hyprland-colors.conf'
 input_path = '~/.config/matugen/templates/hyprland-colors.lua'
 output_path = '~/.config/hypr/hyprland-colors.lua'
 
+[templates.hyprtoolkit]
+input_path = '~/.config/matugen/templates/hyprtoolkit.conf'
+output_path = '~/.config/hypr/hyprtoolkit.conf'
+
 [templates.hyprwat]
 input_path = '~/.config/matugen/templates/hyprwat-colors.toml'
 output_path = '~/.config/hyprwat/hyprwat-colors.toml'
@@ -178,10 +182,6 @@ output_path = '~/.local/state/quickshell/generated/colors.json'
 [templates.rmpc]
 input_path = '~/.config/matugen/templates/rmpc/rmpc.ron'
 output_path = '~/.config/rmpc/themes/matugen.ron'
-
-[templates.rofi]
-input_path = '~/.config/matugen/templates/rofi-colors.rasi'
-output_path = '~/.config/rofi/colors.rasi'
 
 [templates.spotify]
 input_path = '~/.config/matugen/templates/spicetify.ini'

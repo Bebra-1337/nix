@@ -50,12 +50,12 @@
       # Shell integration
       shell_integration = "enabled";
 
-      # Colors — managed by Noctalia templates
-      # Noctalia will write to ~/.config/kitty/current-theme.conf
+      # Colors — managed by Matugen templates
+      # Matugen will write to ~/.config/kitty/current-theme.conf
     };
 
     extraConfig = ''
-      # Include Noctalia-generated theme
+      # Include Matugen-generated theme
       include current-theme.conf
     '';
 

@@ -56,7 +56,9 @@ def convert_scheme(input_path, output_path):
         "surface_container_low": "mSurface",
         "surface_container": "mSurfaceVariant",
         "surface_container_high": "mSurfaceVariant",
-        "surface_container_highest": "mSurfaceVariant"
+        "surface_container_highest": "mSurfaceVariant",
+        "surface_tint": "mPrimary",
+        "source_color": "mPrimary"
     }
 
     dst = {
@@ -72,6 +74,36 @@ def convert_scheme(input_path, output_path):
         dark_val = src["dark"].get(user_key, "#000000")
         light_val = src["light"].get(user_key, "#ffffff")
         dst["colors"][matugen_key] = {
+            "dark": { "color": dark_val },
+            "light": { "color": light_val },
+            "default": { "color": dark_val }
+        }
+
+    # Populate base16 object
+    base16_mapping = {
+        "base00": "mSurface",
+        "base01": "mSurfaceVariant",
+        "base02": "mSurfaceVariant",
+        "base03": "mOnSurfaceVariant",
+        "base04": "mOnSurface",
+        "base05": "mOnSurface",
+        "base06": "mOnSurface",
+        "base07": "mOnSurface",
+        "base08": "mError",
+        "base09": "mSecondary",
+        "base0a": "mPrimary",
+        "base0b": "mTertiary",
+        "base0c": "mTertiary",
+        "base0d": "mSecondary",
+        "base0e": "mError",
+        "base0f": "mTertiary"
+    }
+
+    dst["base16"] = {}
+    for b16_key, user_key in base16_mapping.items():
+        dark_val = src["dark"].get(user_key, "#000000")
+        light_val = src["light"].get(user_key, "#ffffff")
+        dst["base16"][b16_key] = {
             "dark": { "color": dark_val },
             "light": { "color": light_val },
             "default": { "color": dark_val }

@@ -4,11 +4,9 @@
   nixConfig = {
     extra-substituters = [
       "https://hyprland.cachix.org"
-      "https://noctalia.cachix.org"
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-      "noctalia.cachix.org-1:QLqKTBuOXLLr0wQlBOy3DkUjgZ1BNLvL/fDp6f+FMYY="
     ];
   };
 
@@ -37,6 +35,15 @@
 
     bettersoundcloud = {
       url = "github:AlirezaKJ/BetterSoundCloud";
+    };
+
+    elephant = {
+      url = "github:abenz1267/elephant";
+    };
+
+    walker = {
+      url = "github:abenz1267/walker";
+      inputs.elephant.follows = "elephant";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -45,15 +52,63 @@
   let
     system = "x86_64-linux";
 
-    # Оверлей: патчим BetterSoundCloud — заменяем icon.ico на PNG для Linux-трея
-    bettersoundcloudOverlay = final: prev: {
-      bettersoundcloud = bettersoundcloud.packages.${system}.default.overrideAttrs (old: {
-        postPatch = (old.postPatch or "") + ''
+    # Build bettersoundcloud directly using buildNpmPackage from the upstream locked nixpkgs,
+    # enabling makeCacheWritable natively to bypass the npm EACCES permission issue,
+    # and patching the tray icon to PNG during build.
+    bettersoundcloudOverlay = final: prev:
+    let
+      upstreamPkgs = bettersoundcloud.inputs.nixpkgs.legacyPackages.${system};
+    in {
+      bettersoundcloud = upstreamPkgs.buildNpmPackage {
+        pname   = "bettersoundcloud";
+        version = "0.7.1";
+
+        src = bettersoundcloud.outPath;
+
+        npmDepsHash = "sha256-Xj+NpXJloa+xVLVMQ3ScSBDpLCUApddr+jcUU2xLHXU=";
+
+        makeCacheWritable = true;
+        dontNpmBuild = true;
+        ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+
+        nativeBuildInputs = with upstreamPkgs; [ electron makeWrapper ]
+          ++ upstreamPkgs.lib.optionals upstreamPkgs.stdenv.isLinux [ upstreamPkgs.copyDesktopItems ];
+
+        desktopItems = [
+          (upstreamPkgs.makeDesktopItem {
+            name        = "bettersoundcloud";
+            exec        = "bettersoundcloud";
+            icon        = "bettersoundcloud";
+            comment     = "A PC client of SoundCloud";
+            desktopName = "BetterSoundCloud";
+            categories  = [ "AudioVideo" "Audio" ];
+          })
+        ];
+
+        # Replace tray icon path and remove castlabs Widevine components from main.js
+        postPatch = ''
           substituteInPlace main.js \
             --replace-quiet "app/lib/assets/icon.ico" \
-                            "$out/lib/node_modules/bettersoundcloud/app/lib/assets/sc-icon-nobg.png"
+                            "app/lib/assets/sc-icon-nobg.png" \
+            --replace-quiet "  components," "" \
+            --replace-quiet "  .then(() => components.whenReady())" ""
         '';
-      });
+
+        postInstall = ''
+          makeWrapper ${upstreamPkgs.lib.getExe upstreamPkgs.electron} $out/bin/bettersoundcloud \
+            --add-flags $out/lib/node_modules/bettersoundcloud/main.js
+
+          install -Dm644 \
+            $out/lib/node_modules/bettersoundcloud/app/lib/assets/sc-icon-nobg.png \
+            $out/share/icons/hicolor/512x512/apps/bettersoundcloud.png
+        '';
+
+        meta = with upstreamPkgs.lib; {
+          description = "A PC client of SoundCloud with improvement made using electronjs";
+          homepage    = "https://github.com/AlirezaKJ/BetterSoundCloud";
+          license     = licenses.mit;
+        };
+      };
     };
 
     mkSystem = nixosModule: homeModule: nixpkgs.lib.nixosSystem {

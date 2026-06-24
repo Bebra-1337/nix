@@ -29,6 +29,7 @@ hl.monitor({ output = "DP-3", disabled = true })
 hl.env("XCURSOR_SIZE",                    "24")
 hl.env("XCURSOR_THEME",                   "Bibata-Original-Ice")
 hl.env("HYPRCURSOR_SIZE",                 "24")
+hl.env("HYPRCURSOR_THEME",                "Bibata-Original-Ice")
 hl.env("GBM_BACKEND",                     "nvidia-drm")
 hl.env("__GLX_VENDOR_LIBRARY_NAME",       "nvidia")
 hl.env("LIBVA_DRIVER_NAME",               "nvidia")
@@ -55,7 +56,7 @@ hl.config({
     },
 
     decoration = {
-        rounding       = 12,
+        rounding       = 8,
         rounding_power = 2,
         active_opacity   = 1.0,
         inactive_opacity = 0.95,
@@ -120,12 +121,6 @@ hl.animation({ leaf = "fade",        enabled = true, speed = 8,    bezier = "qui
 hl.animation({ leaf = "workspaces",  enabled = true, speed = 5,    bezier = "expo",        style = "slide" })
 hl.animation({ leaf = "layers",      enabled = true, speed = 4,    bezier = "expo",        style = "slide" })
 hl.animation({ leaf = "border",      enabled = true, speed = 10,   bezier = "default"     })
-
--- -------------------------------------------------------
---  NOCTALIA LAYER BLUR
--- -------------------------------------------------------
--- Blur для фона баров и панелей Noctalia
-hl.layer_rule({ match = { namespace = "noctalia-background-.*" }, blur = true, blur_popups = true, ignore_alpha = 0.5 })
 
 -- -------------------------------------------------------
 --  WINDOW RULES

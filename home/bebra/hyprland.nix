@@ -62,7 +62,6 @@ in
     hyprcapture
 
     # Launchers / UI
-    rofi
     libnotify # notify-send CLI
     matugen
     zip

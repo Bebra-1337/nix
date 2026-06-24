@@ -16,6 +16,7 @@ let
 in
 {
   imports = [
+    inputs.walker.homeManagerModules.default
     ./hyprland.nix
     ./kitty.nix
     ./zsh.nix
@@ -31,6 +32,21 @@ in
 
   # Let home-manager manage itself
   programs.home-manager.enable = true;
+
+  # --- Walker ---
+  programs.walker = {
+    enable = true;
+    runAsService = true;
+    config = {
+      theme = "matugen";
+    };
+    themes.matugen = {
+      style = ''
+        @import url("../../../gtk-4.0/colors.css");
+        @define-color theme_fg_color @window_fg_color;
+      '';
+    };
+  };
 
   # --- Git ---
   programs.git = {
@@ -63,13 +79,25 @@ in
     VISUAL = "zed";
     TERMINAL = "kitty";
     BROWSER = "vivaldi";
-    # qt6ct используется Noctalia для теминга Qt-приложений
+    # qt6ct используется для теминга Qt-приложений
     QT_QPA_PLATFORMTHEME = pkgs.lib.mkForce "qt6ct";
   };
 
+  # --- EasyEffects ---
+  services.easyeffects.enable = true;
+
+  # --- Pointer cursor ---
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Original-Ice";
+    size = 24;
+  };
+
   # --- GTK theming ---
-  # Noctalia управляет GTK-темой в runtime через свои шаблоны.
-  # HM задаёт базовый движок (adw-gtk3) и иконки — Noctalia пишет цвета поверх.
+  # Matugen управляет GTK-темой в runtime через свои шаблоны.
+  # HM задаёт базовый движок (adw-gtk3) и иконки — Matugen пишет цвета поверх.
   gtk = {
     enable = true;
     theme = {
@@ -79,11 +107,6 @@ in
     iconTheme = {
       package = yet-another-monochrome-icon-set;
       name = "yet-another-monochrome-icon-set";
-    };
-    cursorTheme = {
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Classic";
-      size = 24;
     };
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
@@ -95,7 +118,7 @@ in
 
   qt = {
     enable = true;
-    # qt6ct используется Noctalia для Qt-теминга
+    # qt6ct используется для Qt-теминга
     platformTheme.name = "qt6ct";
   };
 
@@ -107,7 +130,9 @@ in
       createDirectories = true;
     };
 
-    # gtk-4.0/settings.ini: НЕ ставим force=true, чтобы Noctalia могла
+    configFile."xfce4/helpers.rc".text = "TerminalEmulator=kitty\n";
+
+    # gtk-4.0/settings.ini: НЕ ставим force=true, чтобы Matugen могла
     # управлять этим файлом в runtime через свои шаблоны.
     # Если нужно принудительно — раскомментировать:
     # configFile."gtk-4.0/settings.ini".force = true;

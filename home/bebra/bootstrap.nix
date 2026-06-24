@@ -3,7 +3,7 @@
 # ── Stage 1 Bootstrap ──────────────────────────────────────────
 # Goal: get VPN running so stage 2 can pull everything else.
 # Contains: Hyprland basics, kitty, zsh, clash-verge-rev.
-# No noctalia (requires cachix), no HyDE fonts (requires internet).
+# No HyDE fonts (requires internet).
 #
 # Usage:
 #   sudo nixos-rebuild switch --flake .#BEBRA-PC-bootstrap
@@ -13,6 +13,7 @@
 
 {
   imports = [
+    inputs.walker.homeManagerModules.default
     ./kitty.nix
     ./zsh.nix
   ];
@@ -24,6 +25,21 @@
   };
 
   programs.home-manager.enable = true;
+
+  # --- Walker ---
+  programs.walker = {
+    enable = true;
+    runAsService = true;
+    config = {
+      theme = "matugen";
+    };
+    themes.matugen = {
+      style = ''
+        @import url("../../../gtk-4.0/colors.css");
+        @define-color theme_fg_color @window_fg_color;
+      '';
+    };
+  };
 
   home.sessionVariables = {
     EDITOR = "vim";
@@ -37,7 +53,6 @@
     # Hyprland ecosystem minimum
     hyprpaper
     hyprpolkitagent
-    rofi
     wl-clipboard
     libnotify
 
