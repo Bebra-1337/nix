@@ -21,7 +21,7 @@
         device = "nodev";
         useOSProber = true;
         splashImage = null;
-      }
+      };
     };
     kernelParams = [
       "quiet"
