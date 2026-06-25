@@ -79,7 +79,7 @@
     mpv
     imv # image viewer (Wayland native)
     obs-studio
-    telegram-desktop
+    ayugram-desktop
 
     # --- Theme engines & GUI Tools ---
     nwg-look
@@ -87,6 +87,8 @@
     kdePackages.qt6ct
     libsForQt5.qtstyleplugin-kvantum
     kdePackages.qtstyleplugin-kvantum
+    papirus-icon-theme
+    kdePackages.breeze-icons
   ];
 
   # Default applications

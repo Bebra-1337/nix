@@ -2,16 +2,7 @@
 -- https://wiki.hypr.land/Configuring/Start/
 
 local colors_ok, colors = pcall(require, "hyprland-colors")
-local ok, hyprcapture = pcall(require, "hyprcapture_path")
-if ok and hl.plugin and hl.plugin.hyprcapture then
-    hl.config({
-        plugin = {
-            hyprcapture = {
-                helper = hyprcapture.ui
-            }
-        }
-    })
-end
+
 
 require("autostart")
 require("keybinds")

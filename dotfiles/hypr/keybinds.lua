@@ -47,8 +47,8 @@ for i = 1, 10 do
 end
 
 -- ── Scratchpad ──
-hl.bind(mod .. " + S",          hl.dsp.workspace.toggle_special("magic"))
-hl.bind(mod .. " + SHIFT + S",  hl.dsp.window.move({ workspace = "special:magic" }))
+-- hl.bind(mod .. " + S",          hl.dsp.workspace.toggle_special("magic"))
+-- hl.bind(mod .. " + SHIFT + S",  hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- ── Scroll workspaces / mouse ──
 hl.bind(mod .. " + mouse_down",  hl.dsp.focus({ workspace = "e+1" }))
@@ -58,29 +58,8 @@ hl.bind(mod .. " + mouse:273",   hl.dsp.window.resize(), { mouse = true })
 hl.bind(mod .. " + Z",           hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mod .. " + X",           hl.dsp.window.resize(), { mouse = true })
 
--- ── Screenshots (HyprCapture plugin — install via hyprpm) ──
--- hyprpm add https://github.com/gfhdhytghd/HyprCapture && hyprpm enable hyprcapture
-hl.bind(mod .. " + P", function()
-    if hl.plugin and hl.plugin.hyprcapture then
-        hl.plugin.hyprcapture.open("region")
-    else
-        hl.exec_cmd("notify-send 'HyprCapture' 'Plugin not loaded yet'")
-    end
-end)
-hl.bind(mod .. " + SHIFT + P", function()
-    if hl.plugin and hl.plugin.hyprcapture then
-        hl.plugin.hyprcapture.open("window")
-    else
-        hl.exec_cmd("notify-send 'HyprCapture' 'Plugin not loaded yet'")
-    end
-end)
-hl.bind(mod .. " + CTRL + P", function()
-    if hl.plugin and hl.plugin.hyprcapture then
-        hl.plugin.hyprcapture.open("fullscreen")
-    else
-        hl.exec_cmd("notify-send 'HyprCapture' 'Plugin not loaded yet'")
-    end
-end)
+-- ── Screenshots & Recording (Custom Walker Menu) ──
+hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("screenshot-menu"))
 
 
 -- ── Clipboard ──

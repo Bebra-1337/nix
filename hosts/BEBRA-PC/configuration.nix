@@ -13,12 +13,21 @@
   # --- Boot ---
   boot = {
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot.enable = false;
       efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        efiSupport = true;
+        device = "nodev";
+        useOSProber = true;
+        splashImage = null;
+      }
     };
     kernelParams = [
       "quiet"
       "splash"
+      "rd.udev.log_level=3"
+      "udev.log_priority=3"
       "nvidia_drm.modeset=1"
       "nvidia_drm.fbdev=1"
     ];
