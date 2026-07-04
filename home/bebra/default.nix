@@ -6,8 +6,7 @@
     ./cli/git.nix
     ./desktop/hyprland.nix
     ./desktop/kitty.nix
-    ./desktop/walker.nix
-    ./theme/matugen.nix
+    ./desktop/noctalia.nix
     ./theme/gtk.nix
     ./theme/qt.nix
     ./apps.nix
@@ -37,4 +36,5 @@
 
   # --- EasyEffects ---
   services.easyeffects.enable = true;
+  systemd.user.services.easyeffects.Service.ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
 }

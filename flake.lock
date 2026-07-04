@@ -38,11 +38,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1783096483,
-        "narHash": "sha256-rktS2vaQCYU90bLVL56yn153k3cPjYWnyxwW2I20SGE=",
+        "lastModified": 1783131501,
+        "narHash": "sha256-tZgwAyskyxMHOYWJ9prUX8HrCVrlykD8HFY2iCyDy5U=",
         "ref": "refs/heads/main",
-        "rev": "f80eabc39f5a9f4ace93c8cf76ce98447e9b9bc4",
-        "revCount": 1,
+        "rev": "9bb007171a67d0eca68ddb260392018fe2a666be",
+        "revCount": 3,
         "type": "git",
         "url": "file:///home/bebra/soundcloud-rpc"
       },

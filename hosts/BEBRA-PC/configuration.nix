@@ -12,6 +12,8 @@
 
   # --- Boot ---
   boot = {
+    consoleLogLevel = 0;
+    initrd.verbose = false;
     loader = {
       systemd-boot.enable = false;
       efi.canTouchEfiVariables = true;
@@ -26,8 +28,12 @@
     kernelParams = [
       "quiet"
       "splash"
+      "boot.shell_on_fail"
+      "loglevel=3"
+      "rd.systemd.show_status=false"
       "rd.udev.log_level=3"
       "udev.log_priority=3"
+      "systemd.show_status=false"
       "nvidia_drm.modeset=1"
       "nvidia_drm.fbdev=1"
     ];
@@ -38,6 +44,32 @@
   networking = {
     hostName = "BEBRA-PC";
     networkmanager.enable = true;
+    # Открываем порты под твой конфиг (контроллер 9097 + прокси порты) + фиксим reverse path filtering для TUN
+    firewall = {
+      enable = true;
+      checkReversePath = "loose";
+      trustedInterfaces = [
+        "mihomo"
+        "Mihomo"
+        "enp6s0"
+      ];
+      allowedTCPPorts = [
+        9097
+        7899
+        7898
+        7897
+        7895
+        7896
+      ];
+      allowedUDPPorts = [
+        9097
+        7899
+        7898
+        7897
+        7895
+        7896
+      ];
+    };
   };
 
   # --- Hardware ---
@@ -54,13 +86,22 @@
 
   # --- Unfree packages ---
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "pnpm-9.15.9"
+  ];
 
   # --- SSH ---
   programs.ssh.startAgent = true;
-  services.openssh.enable = true;
 
   # --- Services ---
   services = {
+    ollama = {
+      enable = true;
+      package = pkgs.ollama-cuda;
+    };
+    openssh = {
+      enable = true;
+    };
     upower.enable = true;
     power-profiles-daemon.enable = true;
     xserver.enable = true;
@@ -74,9 +115,16 @@
   # --- PAM ---
   security.pam.services.hyprlock = { };
 
+  # Даём mihomo права на TUN/raw sockets, чтобы Koala Clash мог поднимать TUN от пользователя
+  # security.wrappers.mihomo = {
+  #   owner = "root";
+  #   group = "root";
+  #   capabilities = "cap_net_bind_service,cap_net_admin,cap_net_raw+ep";
+  #   source = "${pkgs.mihomo}/bin/mihomo";
+  # };
+
   # --- ccache ---
   programs.ccache.enable = true;
-  nix.settings.extra-sandbox-paths = [ "/var/cache/ccache" ];
 
   # --- Hyprland ---
   programs.hyprland = {
@@ -98,19 +146,22 @@
       "video"
       "input"
       "plugdev"
+      "libvirtd"
     ];
   };
 
   # --- Programs ---
   programs = {
-    zsh.enable = true;
-    dconf.enable = true;
     clash-verge = {
       enable = true;
       tunMode = true;
-      autoStart = true;
       serviceMode = true;
+      autoStart = true;
     };
+    kdeconnect.enable = true;
+    nix-ld.enable = true;
+    zsh.enable = true;
+    dconf.enable = true;
     thunar = {
       enable = true;
       plugins = with pkgs; [
@@ -126,6 +177,10 @@
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
+
+  # --- Virtualisation ---
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
   # --- Flatpak: Flathub + latest runtimes + Nvidia extensions ---
   systemd.services.flatpak-setup = {
@@ -168,25 +223,25 @@
   };
 
   # --- System packages ---
+  # gvfs и tumbler устанавливаются автоматически через services.*.enable
   environment.systemPackages = with pkgs; [
     git
     wget
     curl
     vim
     file
-    gvfs
-    tumbler
     ffmpegthumbnailer
     poppler
     libgsf
-
-    # --- Wayle Shell ---
-    wayle
+    #koala-clash
+    ollama
+    fastfetch
   ];
 
   # --- Nix settings ---
   nix = {
     settings = {
+      extra-sandbox-paths = [ "/var/cache/ccache" ];
       experimental-features = [
         "nix-command"
         "flakes"
@@ -198,9 +253,11 @@
       ];
       extra-substituters = [
         "https://hyprland.cachix.org"
+        "https://noctalia.cachix.org"
       ];
       extra-trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
       ];
     };
     gc = {

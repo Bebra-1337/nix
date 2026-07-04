@@ -125,3 +125,9 @@ hl.window_rule({ match = { xwayland = true, float = true, fullscreen = false, pi
 -- Tearing for games
 hl.window_rule({ match = { class = "steam_app_.*" }, immediate = true })
 hl.window_rule({ match = { class = "gamescope"    }, immediate = true })
+
+-- Layer rules
+hl.layer_rule({ match = { namespace = "selection" }, no_anim = true })
+
+-- For Noctalia Color templates
+pcall(function() require("noctalia").apply_theme() end)

@@ -12,7 +12,7 @@ let
   kinect-audio = pkgs.stdenv.mkDerivation {
     name = "kinect-audio-setup";
     src = pkgs.fetchgit {
-      url = "git://git.ao2.it/kinect-audio-setup.git";
+      url = "https://git.ao2.it/kinect-audio-setup.git";
       rev = "v0.5";
       hash = "sha256-bFwmWh822KvFwP/0Gu097nF5K2uCwCLMB1RtP7k+Zt0=";
     };

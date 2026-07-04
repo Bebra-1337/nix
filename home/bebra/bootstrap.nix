@@ -2,7 +2,7 @@
 
 # ── Stage 1 Bootstrap ──────────────────────────────────────────
 # Goal: get VPN running so stage 2 can pull everything else.
-# Contains: Hyprland basics, kitty, zsh, clash-verge-rev.
+# Contains: Hyprland basics, kitty, zsh, koala-clash.
 # No HyDE fonts (requires internet).
 #
 # Usage:
@@ -13,9 +13,8 @@
 
 {
   imports = [
-    inputs.walker.homeManagerModules.default
-    ./kitty.nix
-    ./zsh.nix
+    ./desktop/kitty.nix
+    ./cli/zsh.nix
   ];
 
   home = {
@@ -26,21 +25,6 @@
 
   programs.home-manager.enable = true;
 
-  # --- Walker ---
-  programs.walker = {
-    enable = true;
-    runAsService = true;
-    config = {
-      theme = "matugen";
-    };
-    themes.matugen = {
-      style = ''
-        @import url("../../../gtk-4.0/colors.css");
-        @define-color theme_fg_color @window_fg_color;
-      '';
-    };
-  };
-
   home.sessionVariables = {
     EDITOR = "vim";
     TERMINAL = "kitty";
@@ -48,7 +32,7 @@
 
   home.packages = with pkgs; [
     # VPN
-    clash-verge-rev
+    #koala-clash
 
     # Hyprland ecosystem minimum
     hyprpaper
