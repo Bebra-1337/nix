@@ -46,6 +46,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    millennium = {
+      url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
+    };
+
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak";
     };
@@ -68,6 +72,7 @@
 
       bebrasoundcloudOverlay = import ./overlays/bebrasoundcloud.nix { inherit inputs system; };
       mihomoOverlay = import ./overlays/mihomo.nix;
+      millenniumOverlay = inputs.millennium.overlays.default;
 
       mkSystem =
         nixosModule: homeModule:
@@ -75,7 +80,13 @@
           inherit system;
           specialArgs = { inherit inputs; };
           modules = [
-            { nixpkgs.overlays = [ bebrasoundcloudOverlay mihomoOverlay ]; }
+            {
+              nixpkgs.overlays = [
+                bebrasoundcloudOverlay
+                mihomoOverlay
+                millenniumOverlay
+              ];
+            }
             ./hosts/BEBRA-PC/configuration.nix
             nixosModule
             home-manager.nixosModules.home-manager

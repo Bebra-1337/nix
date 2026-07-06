@@ -166,7 +166,7 @@
 
   # Линкуем базовый конфиг. НЕ ставим force=true, чтобы Noctalia
   # могла управлять цветами через свои шаблоны в runtime.
-  xdg.configFile."starship.toml".source = ../../dotfiles/starship.toml;
+  xdg.configFile."starship.toml".source = ../../../dotfiles/starship.toml;
 
   # --- Tools used in aliases ---
   home.packages = with pkgs; [
