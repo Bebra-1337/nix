@@ -15,7 +15,6 @@ hl.bind(mod .. " + code:59", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher /emo
 hl.bind(mod .. " + Q", hl.dsp.window.close())
 hl.bind(mod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mod .. " + F11", hl.dsp.window.fullscreen())
--- hl.bind(mod .. " + P",          hl.dsp.window.pseudo())
 hl.bind(mod .. " + J", hl.dsp.layout("togglesplit"))
 
 -- ── Focus ──
@@ -47,10 +46,6 @@ for i = 1, 10 do
     hl.bind(mod .. " + " .. key, hl.dsp.focus({ workspace = i }))
     hl.bind(mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
-
--- ── Scratchpad ──
--- hl.bind(mod .. " + S",          hl.dsp.workspace.toggle_special("magic"))
--- hl.bind(mod .. " + SHIFT + S",  hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- ── Scroll workspaces / mouse ──
 hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))

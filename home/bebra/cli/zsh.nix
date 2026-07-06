@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   programs.zsh = {
@@ -7,7 +7,7 @@
     syntaxHighlighting.enable = true;
     historySubstringSearch.enable = true;
     
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
     autocd = true;
     enableCompletion = true;
 
@@ -141,9 +141,6 @@
         fastfetch --logo-width 18 --logo-padding 3 --logo nixos_small
       fi
 
-      # direnv hook (also handled by programs.direnv, but explicit for clarity)
-      # eval "$(direnv hook zsh)" -- done automatically by programs.direnv
-
       # C/C++ dev env
       export CC=gcc
       export CXX=g++
@@ -161,14 +158,15 @@
     '';
   };
 
-  # --- Starship prompt — native TOML config ---
+  # --- Starship prompt — native TOML config (цвета управляются Noctalia) ---
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
   };
 
-  # Link the native starship.toml (managed by Matugen to allow dynamic color updates)
-  # xdg.configFile."starship.toml".source = ../../dotfiles/starship.toml;
+  # Линкуем базовый конфиг. НЕ ставим force=true, чтобы Noctalia
+  # могла управлять цветами через свои шаблоны в runtime.
+  xdg.configFile."starship.toml".source = ../../dotfiles/starship.toml;
 
   # --- Tools used in aliases ---
   home.packages = with pkgs; [
@@ -179,7 +177,6 @@
     ripgrep
     btop
     procs
-    git
     jq
     tokei       # code stats
     hyperfine   # benchmarking

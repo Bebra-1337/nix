@@ -83,15 +83,9 @@
   };
 
   # --- Hardware ---
-  hardware = {
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
   };
 
   # --- Unfree packages ---
@@ -124,14 +118,6 @@
   # --- PAM ---
   security.pam.services.hyprlock = { };
 
-  # Даём mihomo права на TUN/raw sockets, чтобы Koala Clash мог поднимать TUN от пользователя
-  # security.wrappers.mihomo = {
-  #   owner = "root";
-  #   group = "root";
-  #   capabilities = "cap_net_bind_service,cap_net_admin,cap_net_raw+ep";
-  #   source = "${pkgs.mihomo}/bin/mihomo";
-  # };
-
   # --- ccache ---
   programs.ccache.enable = true;
 
@@ -144,11 +130,30 @@
     withUWSM = true;
   };
 
-  # Отключаем вывод консольных логов запуска сессии на TTY
-  # systemd.services.greetd.serviceConfig = {
-  #   StandardOutput = "null";
-  #   StandardError = "journal";
-  # };
+  # Оверлей для бесшумного запуска UWSM при входе через greeter.
+  # Мы перехватываем запуск uwsm и, если он запущен из-под greetd, перенаправляем его вывод в /dev/null.
+  # Это сохраняет стандартную сессию без создания кастомных desktop-файлов.
+  nixpkgs.overlays = [
+    (final: prev: {
+      uwsm = prev.symlinkJoin {
+        name = "uwsm-silent-wrapper";
+        paths = [ prev.uwsm ];
+        postBuild = ''
+          rm $out/bin/uwsm
+          cat << 'EOF' > $out/bin/uwsm
+          #!/bin/sh
+          if [ -n "$GREETD_SOCK" ] && [ "$1" = "start" ]; then
+            exec ${prev.uwsm}/bin/uwsm "$@" >/dev/null 2>&1
+          else
+            exec ${prev.uwsm}/bin/uwsm "$@"
+          fi
+          EOF
+          chmod +x $out/bin/uwsm
+        '';
+        meta.mainProgram = "uwsm";
+      };
+    })
+  ];
 
   # --- Greeter ---
   programs.noctalia-greeter = {
@@ -213,46 +218,6 @@
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
 
-  # --- Flatpak: Flathub + latest runtimes + Nvidia extensions ---
-  systemd.services.flatpak-setup = {
-    description = "Setup Flatpak remotes and runtimes";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    path = [
-      pkgs.flatpak
-      pkgs.gnugrep
-      pkgs.coreutils
-    ];
-    script = ''
-      flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-      # Install latest available branch of a runtime
-      install_latest() {
-        local ref="$1"
-        local branch
-        branch=$(flatpak remote-ls --columns=ref flathub 2>/dev/null \
-          | grep "^$ref//" | grep -oP '(?<=//)[\d.]+$' | sort -V | tail -1)
-        [ -n "$branch" ] && flatpak install -y --noninteractive flathub "$ref//$branch" || true
-      }
-
-      install_latest org.freedesktop.Platform
-      install_latest org.freedesktop.Sdk
-      install_latest org.gnome.Platform
-      install_latest org.gnome.Sdk
-      install_latest org.kde.Platform
-      install_latest org.kde.Sdk
-
-      # Nvidia extensions — Flatpak auto-selects version matching host driver
-      flatpak install -y --noninteractive flathub org.freedesktop.Platform.GL.nvidia-open || true
-      flatpak install -y --noninteractive flathub org.freedesktop.Platform.VAAPI.nvidia   || true
-    '';
-  };
-
   # --- System packages ---
   # gvfs и tumbler устанавливаются автоматически через services.*.enable
   environment.systemPackages = with pkgs; [
@@ -264,9 +229,7 @@
     ffmpegthumbnailer
     poppler
     libgsf
-    #koala-clash
     ollama
-    fastfetch
   ];
 
   # --- Nix settings ---

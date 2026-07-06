@@ -68,11 +68,7 @@
     ida-free
     freecad-wayland
 
-    # --- SSH ---
-    openssh
     # Extra tools
-    gamemode
-    gamescope
     satty
 
     # --- Music ---

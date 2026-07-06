@@ -100,7 +100,7 @@
       nixosConfigurations = {
         # ── Stage 1: VPN + minimal desktop ──
         # sudo nixos-rebuild switch --flake .#BEBRA-PC-bootstrap
-        BEBRA-PC-bootstrap = mkSystem ./hosts/BEBRA-PC/bootstrap.nix (import ./home/bebra/bootstrap.nix);
+        BEBRA-PC-bootstrap = mkSystem ({ ... }: { }) (import ./home/bebra/bootstrap.nix);
 
         # ── Stage 2: Full config (run after VPN is up) ──
         # sudo nixos-rebuild switch --flake .#BEBRA-PC

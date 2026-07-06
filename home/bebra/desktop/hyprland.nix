@@ -32,15 +32,11 @@
 
     grimblast # fallback
 
-    # Wallpaper
-    #hyprpaper
-
     # Audio control (replaces pavucontrol)
     hyprpwcenter
     playerctl
 
     # Idle / lock
-    hypridle
     hyprlock
 
     # Screen color temperature
@@ -83,16 +79,6 @@
     source = ../../../dotfiles/hypr/hyprlock.conf;
     force = true;
   };
-  xdg.configFile."hypr/hypridle.conf" = {
-    source = ../../../dotfiles/hypr/hypridle.conf;
-    force = true;
-  };
-  #xdg.configFile."hypr/hyprpaper.conf".source = ../../../dotfiles/hypr/hyprpaper.conf;
-
-  # systemd user services under UWSM
-  services.hypridle.enable = true;
-  #services.hyprpaper.enable = true;
-
   # hyprpolkitagent as systemd user service
   systemd.user.services.hyprpolkitagent = {
     Unit = {

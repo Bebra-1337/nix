@@ -31,11 +31,7 @@
   };
 
   home.packages = with pkgs; [
-    # VPN
-    #koala-clash
-
     # Hyprland ecosystem minimum
-    #hyprpaper
     hyprpolkitagent
     wl-clipboard
     libnotify
@@ -45,17 +41,6 @@
     noto-fonts
     noto-fonts-color-emoji
   ];
-
-  # Minimal Hyprland configs
-  # xdg.configFile."hypr/hyprland.lua".source = ../../dotfiles/hypr/hyprland.lua;
-  # xdg.configFile."hypr/autostart.lua".source = ../../dotfiles/hypr/autostart.lua;
-  # xdg.configFile."hypr/keybinds.lua".source = ../../dotfiles/hypr/keybinds.lua;
-  # xdg.configFile."hypr/hyprpaper.conf".source = ../../dotfiles/hypr/hyprpaper.conf;
-  # xdg.configFile."hypr/hyprlock.conf".source = ../../dotfiles/hypr/hyprlock.conf;
-  # xdg.configFile."hypr/hypridle.conf".source = ../../dotfiles/hypr/hypridle.conf;
-
-  #services.hyprpaper.enable = true;
-  services.hypridle.enable = true;
 
   systemd.user.services.hyprpolkitagent = {
     Unit = {
@@ -77,3 +62,4 @@
     };
   };
 }
+
