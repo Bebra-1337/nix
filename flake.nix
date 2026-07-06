@@ -40,6 +40,20 @@
       url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    noctalia-greeter = {
+      url = "github:noctalia-dev/noctalia-greeter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-flatpak = {
+      url = "github:gmodena/nix-flatpak";
+    };
+
+    evangelion-ui-plymouth = {
+      url = "gitlab:lobstermane/evangelion-ui-plymouth";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -74,6 +88,7 @@
                 sharedModules = [
                   inputs.hyprland.homeManagerModules.default
                   inputs.noctalia.homeModules.default
+                  inputs.nix-flatpak.homeManagerModules.nix-flatpak
                 ];
                 users.bebra = homeModule;
               };

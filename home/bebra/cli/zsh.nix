@@ -6,6 +6,23 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     historySubstringSearch.enable = true;
+    
+    dotDir = ".config/zsh";
+    autocd = true;
+    enableCompletion = true;
+
+    plugins = [
+      {
+        name = "zsh-nix-shell";
+        file = "share/zsh-nix-shell/nix-shell.plugin.zsh";
+        src = pkgs.zsh-nix-shell;
+      }
+      {
+        name = "fzf-tab";
+        file = "share/fzf-tab/fzf-tab.plugin.zsh";
+        src = pkgs.zsh-fzf-tab;
+      }
+    ];
 
     history = {
       size = 50000;
@@ -78,17 +95,51 @@
     };
 
     initContent = ''
-      # fzf keybindings
-      source ${pkgs.fzf}/share/fzf/key-bindings.zsh
-      source ${pkgs.fzf}/share/fzf/completion.zsh
-
       # zoxide (smarter cd)
       eval "$(zoxide init zsh)"
+
+      # Привязка стрелочек для умного поиска по истории (history-substring-search)
+      bindkey '^[[A' history-substring-search-up
+      bindkey '^[[B' history-substring-search-down
+      bindkey '^[OA' history-substring-search-up
+      bindkey '^[OB' history-substring-search-down
+
+      # Ctrl + стрелочки для навигации по словам и гибкого автодополнения (по одному слову)
+      bindkey '^[[1;5C' forward-word      # Ctrl + Стрелка вправо (принять одно слово автодополнения)
+      bindkey '^[[1;5D' backward-word     # Ctrl + Стрелка влево (перейти на слово назад)
+
+      # Ctrl+Z для отмены ввода (undo) в интерактивной строке
+      bindkey '^Z' undo
 
       # fzf settings
       export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
       export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
       export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+
+      # --- fzf-tab configuration ---
+      # Отключаем стандартное меню автодополнения Zsh
+      zstyle ':completion:*' menu no
+      # Группируем результаты автодополнения по категориям
+      zstyle ':completion:*:descriptions' format '[%d]'
+      # Интерактивный предпросмотр файлов через bat и папок через eza
+      zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat --color=always --style=numbers --line-range=:500 $realpath 2>/dev/null || eza -1 --color=always --icons $realpath'
+      # Интерактивное дерево процессов для команды kill
+      zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --forest -p $group'
+      zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
+
+      # Разноцветные man-страницы (красивый просмотр документации)
+      export LESS_TERMCAP_mb=$'\e[1;31m'      # blinking
+      export LESS_TERMCAP_md=$'\e[1;36m'      # bold (cyan)
+      export LESS_TERMCAP_me=$'\e[0m'         # end bold/blink
+      export LESS_TERMCAP_so=$'\e[01;33m'     # standout (yellow/black)
+      export LESS_TERMCAP_se=$'\e[0m'         # end standout
+      export LESS_TERMCAP_us=$'\e[1;4;32m'    # underline (green)
+      export LESS_TERMCAP_ue=$'\e[0m'         # end underline
+
+      # Запуск fastfetch при открытии нового терминала (только в интерактивной сессии)
+      if [[ -o interactive ]]; then
+        fastfetch --logo-width 18 --logo-padding 3 --logo nixos_small
+      fi
 
       # direnv hook (also handled by programs.direnv, but explicit for clarity)
       # eval "$(direnv hook zsh)" -- done automatically by programs.direnv
@@ -102,6 +153,11 @@
       export QT_QPA_PLATFORM=wayland
       export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
       export QML2_IMPORT_PATH="$HOME/.local/lib/qml"
+
+      # Запуск Qt Creator в фоне с отвязкой от терминала (чтобы консоль можно было закрыть)
+      qtc() {
+        qtcreator "''${@:-.}" &> /dev/null &!
+      }
     '';
   };
 
@@ -118,7 +174,6 @@
   home.packages = with pkgs; [
     eza
     bat
-    fzf
     fd
     zoxide
     ripgrep
@@ -129,4 +184,10 @@
     tokei       # code stats
     hyperfine   # benchmarking
   ];
+
+  # --- FZF Integration ---
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 }

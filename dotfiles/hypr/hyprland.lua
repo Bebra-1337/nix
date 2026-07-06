@@ -11,22 +11,22 @@ require("keybinds")
 -- -------------------------------------------------------
 --  MONITORS
 -- -------------------------------------------------------
-hl.monitor({ output = "DP-2", mode = "1920x1080@180",  position = "0x0", scale = 1 })
+hl.monitor({ output = "DP-2", mode = "1920x1080@180", position = "0x0", scale = 1 })
 hl.monitor({ output = "DP-3", disabled = true })
 
 -- -------------------------------------------------------
 --  ENVIRONMENT
 -- -------------------------------------------------------
-hl.env("XCURSOR_SIZE",                    "24")
-hl.env("XCURSOR_THEME",                   "Bibata-Original-Ice")
-hl.env("HYPRCURSOR_SIZE",                 "24")
-hl.env("HYPRCURSOR_THEME",                "Bibata-Original-Ice")
-hl.env("GBM_BACKEND",                     "nvidia-drm")
-hl.env("__GLX_VENDOR_LIBRARY_NAME",       "nvidia")
-hl.env("LIBVA_DRIVER_NAME",               "nvidia")
-hl.env("NVD_BACKEND",                     "direct")
-hl.env("NIXOS_OZONE_WL",                  "1")
-hl.env("QT_QPA_PLATFORM",                 "wayland")
+hl.env("XCURSOR_SIZE", "24")
+hl.env("XCURSOR_THEME", "Bibata-Original-Ice")
+hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("HYPRCURSOR_THEME", "Bibata-Original-Ice")
+hl.env("GBM_BACKEND", "nvidia-drm")
+hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+hl.env("LIBVA_DRIVER_NAME", "nvidia")
+hl.env("NVD_BACKEND", "direct")
+hl.env("NIXOS_OZONE_WL", "1")
+hl.env("QT_QPA_PLATFORM", "wayland")
 hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 
 -- -------------------------------------------------------
@@ -47,37 +47,37 @@ hl.config({
     },
 
     decoration = {
-        rounding       = 8,
-        rounding_power = 2,
+        rounding         = 4,
+        rounding_power   = 2,
         active_opacity   = 1.0,
         inactive_opacity = 0.95,
-        shadow = {
+        shadow           = {
             enabled      = true,
-            range        = 8,
+            range        = 4,
             render_power = 3,
-            color        = 0xee0d0d0d,
+            color        = 0xee1a1a1a,
         },
-        blur = {
-            enabled          = true,
-            size             = 6,
-            passes           = 3,
-            vibrancy         = 0.1696,
+        blur             = {
+            enabled           = true,
+            size              = 3,
+            passes            = 2,
+            vibrancy          = 0.1696,
             new_optimizations = true,
         },
     },
 
     input = {
-        kb_layout  = "us,ru",
-        kb_options = "grp:alt_shift_toggle",
-        follow_mouse = 1,
-        sensitivity  = 0,
+        kb_layout     = "us,ru",
+        kb_options    = "grp:alt_shift_toggle",
+        follow_mouse  = 1,
+        sensitivity   = 0,
         accel_profile = "flat",
-        touchpad = { natural_scroll = false },
+        touchpad      = { natural_scroll = false },
     },
 
     dwindle = {
-        preserve_split  = true,
-        smart_resizing  = true,
+        preserve_split = true,
+        smart_resizing = true,
     },
 
     master = {
@@ -85,33 +85,36 @@ hl.config({
     },
 
     misc = {
-        force_default_wallpaper  = 0,
-        disable_hyprland_logo    = true,
-        vrr                      = 1,
-        mouse_move_enables_dpms  = true,
-        key_press_enables_dpms   = true,
+        force_default_wallpaper = 0,
+        disable_hyprland_logo   = true,
+        vrr                     = 1,
+        mouse_move_enables_dpms = true,
+        key_press_enables_dpms  = true,
     },
 })
 
 -- -------------------------------------------------------
 --  ANIMATIONS
 -- -------------------------------------------------------
-hl.curve("expo",      { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
-hl.curve("wind",      { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
-hl.curve("winIn",     { type = "bezier", points = { {0.1,  1.1}, {0.1, 1.1}  } })
-hl.curve("winOut",    { type = "bezier", points = { {0.3,  -0.3}, {0, 1}     } })
-hl.curve("almostLinear", { type = "bezier", points = { {0.5, 0.5}, {0.75, 1} } })
-hl.curve("quick",     { type = "bezier", points = { {0.15, 0}, {0.1, 1}      } })
+hl.curve("default",        { type = "bezier", points = { {0.12, 0.92}, {0.08, 1.0}  } })
+hl.curve("wind",           { type = "bezier", points = { {0.12, 0.92}, {0.08, 1.0}  } })
+hl.curve("overshot",       { type = "bezier", points = { {0.18, 0.95}, {0.22, 1.03} } })
+hl.curve("liner",          { type = "bezier", points = { {1.0,  1.0},  {1.0,  1.0}  } })
 
-hl.animation({ leaf = "global",      enabled = true, speed = 6,    bezier = "default"     })
-hl.animation({ leaf = "windows",     enabled = true, speed = 5,    bezier = "expo",        style = "slide" })
-hl.animation({ leaf = "windowsIn",   enabled = true, speed = 5,    bezier = "winIn",       style = "slide" })
-hl.animation({ leaf = "windowsOut",  enabled = true, speed = 4,    bezier = "winOut",      style = "slide" })
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 5,    bezier = "wind",        style = "slide" })
-hl.animation({ leaf = "fade",        enabled = true, speed = 8,    bezier = "quick"       })
-hl.animation({ leaf = "workspaces",  enabled = true, speed = 5,    bezier = "expo",        style = "slide" })
-hl.animation({ leaf = "layers",      enabled = true, speed = 4,    bezier = "expo",        style = "slide" })
-hl.animation({ leaf = "border",      enabled = true, speed = 10,   bezier = "default"     })
+hl.animation({ leaf = "windows",       enabled = true,  speed = 5,    bezier = "wind",         style = "popin 60%" })
+hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 6,    bezier = "overshot",     style = "popin 60%" })
+hl.animation({ leaf = "windowsOut",    enabled = true,  speed = 4,    bezier = "overshot",     style = "popin 60%" })
+hl.animation({ leaf = "windowsMove",   enabled = true,  speed = 4,    bezier = "overshot",     style = "slide" })
+hl.animation({ leaf = "layers",        enabled = true,  speed = 4,    bezier = "default",      style = "popin" })
+hl.animation({ leaf = "fadeIn",        enabled = true,  speed = 7,    bezier = "default" })
+hl.animation({ leaf = "fadeOut",       enabled = true,  speed = 7,    bezier = "default" })
+hl.animation({ leaf = "fadeSwitch",    enabled = true,  speed = 7,    bezier = "default" })
+hl.animation({ leaf = "fadeShadow",    enabled = true,  speed = 7,    bezier = "default" })
+hl.animation({ leaf = "fadeDim",       enabled = true,  speed = 7,    bezier = "default" })
+hl.animation({ leaf = "fadeLayers",    enabled = true,  speed = 7,    bezier = "default" })
+hl.animation({ leaf = "workspaces",    enabled = true,  speed = 5,    bezier = "overshot",     style = "slidevert" })
+hl.animation({ leaf = "border",        enabled = true,  speed = 1,    bezier = "liner" })
+hl.animation({ leaf = "borderangle",   enabled = true,  speed = 24,   bezier = "liner",        style = "loop" })
 
 -- -------------------------------------------------------
 --  WINDOW RULES
@@ -120,14 +123,37 @@ hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 
 -- Float
 hl.window_rule({ match = { class = "^(hyprpwcenter|blueman-manager|nm-connection-editor)$" }, float = true })
-hl.window_rule({ match = { xwayland = true, float = true, fullscreen = false, pin = false, class = "^$", title = "^$" }, no_focus = true })
+hl.window_rule({
+    -- Fix some dragging issues with XWayland
+    name  = "fix-xwayland-drags",
+    match = {
+        class      = "^$",
+        title      = "^$",
+        xwayland   = true,
+        float      = true,
+        fullscreen = false,
+        pin        = false,
+    },
+
+    no_focus = true,
+})
 
 -- Tearing for games
 hl.window_rule({ match = { class = "steam_app_.*" }, immediate = true })
-hl.window_rule({ match = { class = "gamescope"    }, immediate = true })
+hl.window_rule({ match = { class = "gamescope" }, immediate = true })
 
 -- Layer rules
 hl.layer_rule({ match = { namespace = "selection" }, no_anim = true })
+hl.layer_rule({
+    name = "noctalia",
+    match = {
+        namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd)$",
+    },
+    no_anim = true,
+    ignore_alpha = 0.5,
+    blur = true,
+    blur_popups = true,
+})
 
 -- For Noctalia Color templates
 pcall(function() require("noctalia").apply_theme() end)

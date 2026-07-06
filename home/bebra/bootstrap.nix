@@ -35,7 +35,7 @@
     #koala-clash
 
     # Hyprland ecosystem minimum
-    hyprpaper
+    #hyprpaper
     hyprpolkitagent
     wl-clipboard
     libnotify
@@ -54,7 +54,7 @@
   # xdg.configFile."hypr/hyprlock.conf".source = ../../dotfiles/hypr/hyprlock.conf;
   # xdg.configFile."hypr/hypridle.conf".source = ../../dotfiles/hypr/hypridle.conf;
 
-  services.hyprpaper.enable = true;
+  #services.hyprpaper.enable = true;
   services.hypridle.enable = true;
 
   systemd.user.services.hyprpolkitagent = {

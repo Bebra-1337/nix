@@ -8,6 +8,7 @@
     ../../modules/system/gaming.nix
     ../../modules/system/locale.nix
     ../../modules/system/kinect-watchdog/kinect-watchdog.nix
+    inputs.noctalia-greeter.nixosModules.default
   ];
 
   # --- Boot ---
@@ -23,6 +24,7 @@
         device = "nodev";
         useOSProber = true;
         splashImage = null;
+        theme = ./themes/CyberGRUB-2077;
       };
     };
     kernelParams = [
@@ -38,6 +40,14 @@
       "nvidia_drm.fbdev=1"
     ];
     kernelPackages = pkgs.linuxPackages_latest;
+
+    plymouth = {
+      enable = true;
+      theme = "evangelion-ui";
+      themePackages = [
+        inputs.evangelion-ui-plymouth.packages.${pkgs.stdenv.hostPlatform.system}.default
+      ];
+    };
   };
 
   # --- Networking ---
@@ -106,7 +116,6 @@
     power-profiles-daemon.enable = true;
     xserver.enable = true;
     flatpak.enable = true;
-    displayManager.ly.enable = true;
     blueman.enable = true;
     gvfs.enable = true;
     tumbler.enable = true;
@@ -133,6 +142,28 @@
     portalPackage =
       inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     withUWSM = true;
+  };
+
+  # Отключаем вывод консольных логов запуска сессии на TTY
+  # systemd.services.greetd.serviceConfig = {
+  #   StandardOutput = "null";
+  #   StandardError = "journal";
+  # };
+
+  # --- Greeter ---
+  programs.noctalia-greeter = {
+    enable = true;
+    settings = {
+      keyboard = {
+        layout = "us,ru";
+        options = "grp:alt_shift_toggle";
+        numlock = true;
+      };
+      appearance = {
+        scheme = "Synced";
+        hide_logo = true;
+      };
+    };
   };
 
   # --- Users ---

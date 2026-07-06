@@ -4,9 +4,11 @@
   imports = [
     ./cli/zsh.nix
     ./cli/git.nix
+    ./cli/fastfetch.nix
     ./desktop/hyprland.nix
     ./desktop/kitty.nix
     ./desktop/noctalia.nix
+    ./desktop/flatpak.nix
     ./theme/gtk.nix
     ./theme/qt.nix
     ./apps.nix
@@ -21,7 +23,6 @@
   # Let home-manager manage itself
   programs.home-manager.enable = true;
 
-  # --- Session variables ---
   home.sessionVariables = {
     EDITOR = "zed";
     VISUAL = "zed";

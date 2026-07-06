@@ -47,6 +47,7 @@
     qt6.qtsvg
     qt6.qtmultimedia
 
+
     # Build helpers
     meson
     autoconf

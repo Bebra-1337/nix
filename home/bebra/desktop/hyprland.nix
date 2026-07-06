@@ -33,7 +33,7 @@
     grimblast # fallback
 
     # Wallpaper
-    hyprpaper
+    #hyprpaper
 
     # Audio control (replaces pavucontrol)
     hyprpwcenter
@@ -67,16 +67,31 @@
   ];
 
   # Link the native Lua configs (Hyprland >= 0.55)
-  xdg.configFile."hypr/hyprland.lua".source = ../../../dotfiles/hypr/hyprland.lua;
-  xdg.configFile."hypr/autostart.lua".source = ../../../dotfiles/hypr/autostart.lua;
-  xdg.configFile."hypr/keybinds.lua".source = ../../../dotfiles/hypr/keybinds.lua;
-  xdg.configFile."hypr/hyprlock.conf".source = ../../../dotfiles/hypr/hyprlock.conf;
-  xdg.configFile."hypr/hypridle.conf".source = ../../../dotfiles/hypr/hypridle.conf;
-  xdg.configFile."hypr/hyprpaper.conf".source = ../../../dotfiles/hypr/hyprpaper.conf;
+  xdg.configFile."hypr/hyprland.lua" = {
+    source = ../../../dotfiles/hypr/hyprland.lua;
+    force = true;
+  };
+  xdg.configFile."hypr/autostart.lua" = {
+    source = ../../../dotfiles/hypr/autostart.lua;
+    force = true;
+  };
+  xdg.configFile."hypr/keybinds.lua" = {
+    source = ../../../dotfiles/hypr/keybinds.lua;
+    force = true;
+  };
+  xdg.configFile."hypr/hyprlock.conf" = {
+    source = ../../../dotfiles/hypr/hyprlock.conf;
+    force = true;
+  };
+  xdg.configFile."hypr/hypridle.conf" = {
+    source = ../../../dotfiles/hypr/hypridle.conf;
+    force = true;
+  };
+  #xdg.configFile."hypr/hyprpaper.conf".source = ../../../dotfiles/hypr/hyprpaper.conf;
 
   # systemd user services under UWSM
   services.hypridle.enable = true;
-  services.hyprpaper.enable = true;
+  #services.hyprpaper.enable = true;
 
   # hyprpolkitagent as systemd user service
   systemd.user.services.hyprpolkitagent = {

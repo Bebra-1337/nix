@@ -9,12 +9,11 @@ hl.bind(mod .. " + E", hl.dsp.exec_cmd("uwsm app -- thunar"))
 hl.bind(mod .. " + B", hl.dsp.exec_cmd("uwsm app -- vivaldi"))
 hl.bind(mod .. " + A", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher"))
 hl.bind(mod .. " + C", hl.dsp.exec_cmd("uwsm app -- zeditor"))
-hl.bind(mod .. " + less", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher /emo"))
+hl.bind(mod .. " + code:59", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher /emo"))
 
 -- ── Window management ──
 hl.bind(mod .. " + Q", hl.dsp.window.close())
 hl.bind(mod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mod .. " + F", hl.dsp.window.fullscreen())
 hl.bind(mod .. " + F11", hl.dsp.window.fullscreen())
 -- hl.bind(mod .. " + P",          hl.dsp.window.pseudo())
 hl.bind(mod .. " + J", hl.dsp.layout("togglesplit"))
@@ -25,7 +24,9 @@ hl.bind(mod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mod .. " + up", hl.dsp.focus({ direction = "up" }))
 hl.bind(mod .. " + down", hl.dsp.focus({ direction = "down" }))
 hl.bind(mod .. " + H", hl.dsp.focus({ direction = "left" }))
-hl.bind(mod .. " + L", hl.dsp.exec_cmd("hyprlock"))
+hl.bind("ALT + Tab", hl.dsp.window.cycle_next())
+hl.bind(mod .. " + L", hl.dsp.exec_cmd(ipc .. " session lock"))
+hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd(ipc .. " panel-toggle session"))
 hl.bind(mod .. " + K", hl.dsp.focus({ direction = "up" }))
 
 -- ── Move windows ──
@@ -60,7 +61,8 @@ hl.bind(mod .. " + Z", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + X", hl.dsp.window.resize(), { mouse = true })
 
 -- ── Screenshots & Recording (Custom Walker Menu) ──
-hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd(ipc .. " screenshot-region"))
+hl.bind(mod .. " + S", hl.dsp.exec_cmd(ipc .. " screenshot-region"))
+hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd(ipc .. " screenshot-fullscreen"))
 
 
 -- ── Clipboard ──

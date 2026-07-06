@@ -60,8 +60,10 @@
     '';
 
     keybindings = {
-      "ctrl+shift+c" = "copy_to_clipboard";
-      "ctrl+shift+v" = "paste_from_clipboard";
+      "ctrl+c"       = "copy_or_interrupt";
+      "ctrl+с"       = "copy_or_interrupt"; # Russian с
+      "ctrl+v"       = "paste_from_clipboard";
+      "ctrl+м"       = "paste_from_clipboard"; # Russian м
       "ctrl+shift+t" = "new_tab_with_cwd";
       "ctrl+shift+w" = "close_tab";
       "ctrl+tab"     = "next_tab";
@@ -70,6 +72,32 @@
       "ctrl+equal"   = "increase_font_size";
       "ctrl+minus"   = "decrease_font_size";
       "ctrl+0"       = "restore_font_size";
+
+      # Исправление горячих клавиш Ctrl в русской раскладке (отправляем ASCII-коды управления)
+      "ctrl+я" = "send_text all \\x1a"; # Ctrl+Z
+      "ctrl+ф" = "send_text all \\x01"; # Ctrl+A
+      "ctrl+и" = "send_text all \\x02"; # Ctrl+B
+      "ctrl+в" = "send_text all \\x04"; # Ctrl+D
+      "ctrl+у" = "send_text all \\x05"; # Ctrl+E
+      "ctrl+а" = "send_text all \\x06"; # Ctrl+F
+      "ctrl+п" = "send_text all \\x07"; # Ctrl+G
+      "ctrl+р" = "send_text all \\x08"; # Ctrl+H
+      "ctrl+ш" = "send_text all \\x09"; # Ctrl+I
+      "ctrl+о" = "send_text all \\x0a"; # Ctrl+J
+      "ctrl+л" = "send_text all \\x0b"; # Ctrl+K
+      "ctrl+д" = "send_text all \\x0c"; # Ctrl+L
+      "ctrl+ь" = "send_text all \\x0d"; # Ctrl+M
+      "ctrl+т" = "send_text all \\x0e"; # Ctrl+N
+      "ctrl+щ" = "send_text all \\x0f"; # Ctrl+O
+      "ctrl+з" = "send_text all \\x10"; # Ctrl+P
+      "ctrl+й" = "send_text all \\x11"; # Ctrl+Q
+      "ctrl+к" = "send_text all \\x12"; # Ctrl+R
+      "ctrl+ы" = "send_text all \\x13"; # Ctrl+S
+      "ctrl+е" = "send_text all \\x14"; # Ctrl+T
+      "ctrl+г" = "send_text all \\x15"; # Ctrl+U
+      "ctrl+ц" = "send_text all \\x17"; # Ctrl+W
+      "ctrl+ч" = "send_text all \\x18"; # Ctrl+X
+      "ctrl+н" = "send_text all \\x19"; # Ctrl+Y
     };
   };
 }
