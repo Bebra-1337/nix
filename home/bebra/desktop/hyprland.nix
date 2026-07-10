@@ -36,9 +36,6 @@
     hyprpwcenter
     playerctl
 
-    # Idle / lock
-    hyprlock
-
     # Screen color temperature
     hyprsunset
 
@@ -73,10 +70,6 @@
   };
   xdg.configFile."hypr/keybinds.lua" = {
     source = ../../../dotfiles/hypr/keybinds.lua;
-    force = true;
-  };
-  xdg.configFile."hypr/hyprlock.conf" = {
-    source = ../../../dotfiles/hypr/hyprlock.conf;
     force = true;
   };
   # hyprpolkitagent as systemd user service

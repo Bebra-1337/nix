@@ -8,7 +8,6 @@
     ./desktop/hyprland.nix
     ./desktop/kitty.nix
     ./desktop/noctalia.nix
-    ./desktop/flatpak.nix
     ./theme/gtk.nix
     ./theme/qt.nix
     ./apps.nix

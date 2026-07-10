@@ -89,6 +89,7 @@
             }
             ./hosts/BEBRA-PC/configuration.nix
             nixosModule
+            inputs.nix-flatpak.nixosModules.nix-flatpak
             home-manager.nixosModules.home-manager
             {
               home-manager = {
@@ -99,7 +100,6 @@
                 sharedModules = [
                   inputs.hyprland.homeManagerModules.default
                   inputs.noctalia.homeModules.default
-                  inputs.nix-flatpak.homeManagerModules.nix-flatpak
                 ];
                 users.bebra = homeModule;
               };

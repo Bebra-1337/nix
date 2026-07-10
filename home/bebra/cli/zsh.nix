@@ -155,6 +155,16 @@
       qtc() {
         qtcreator "''${@:-.}" &> /dev/null &!
       }
+
+      # Динамическое слияние конфига starship с палитрой цветов Noctalia
+      if [ -f "$HOME/.config/starship.toml" ]; then
+        mkdir -p "$HOME/.cache/starship"
+        cat "$HOME/.config/starship.toml" > "$HOME/.cache/starship/config.toml"
+        if [ -f "$HOME/.cache/noctalia/starship-palette.toml" ]; then
+          cat "$HOME/.cache/noctalia/starship-palette.toml" >> "$HOME/.cache/starship/config.toml"
+        fi
+        export STARSHIP_CONFIG="$HOME/.cache/starship/config.toml"
+      fi
     '';
   };
 
@@ -162,11 +172,11 @@
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
+    # Указываем активную палитру (файл с цветами подключается динамически ниже)
+    settings = builtins.fromTOML (builtins.readFile ../../../dotfiles/starship.toml) // {
+      palette = "noctalia";
+    };
   };
-
-  # Линкуем базовый конфиг. НЕ ставим force=true, чтобы Noctalia
-  # могла управлять цветами через свои шаблоны в runtime.
-  xdg.configFile."starship.toml".source = ../../../dotfiles/starship.toml;
 
   # --- Tools used in aliases ---
   home.packages = with pkgs; [

@@ -12,28 +12,18 @@
       }
     ];
 
-    # Список установленных Flatpak приложений
+    # Список установленных Flatpak приложений (системно)
     packages = [
-      # --- Runtimes (ветка не указана — flatpak ставит stable автоматически) ---
-      "org.freedesktop.Platform"
-      "org.freedesktop.Sdk"
-      "org.gnome.Platform"
-      "org.gnome.Sdk"
-      "org.kde.Platform"
-      "org.kde.Sdk"
-      # Nvidia: flatpak подбирает ветку под версию драйвера
-      "org.freedesktop.Platform.GL.nvidia-open"
-      "org.freedesktop.Platform.VAAPI.nvidia"
-
       # --- Приложения ---
       "com.github.tchx84.Flatseal"
       "io.github.Soundux"
       "io.github.flattool.Warehouse"
       "org.vinegarhq.Sober"
+      "org.vinegarhq.Vinegar"
     ];
 
-    # Ваши текущие оверриды прав доступа (глобальные и для Sober)
-    overrides = {
+    # Глобальные и индивидуальные права/переменные приложений
+    overrides.settings = {
       global = {
         Context = {
           filesystems = [
@@ -65,6 +55,12 @@
         };
         Environment = {
           SDL_CAMERA_DRIVER = "pipewire";
+        };
+      };
+
+      "io.github.Soundux" = {
+        Environment = {
+          ICON_THEME = "Adwaita";
         };
       };
     };

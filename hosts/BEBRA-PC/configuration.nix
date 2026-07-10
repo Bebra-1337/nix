@@ -7,6 +7,7 @@
     ../../modules/system/audio.nix
     ../../modules/system/gaming.nix
     ../../modules/system/locale.nix
+    ../../modules/system/flatpak.nix
     ../../modules/system/kinect-watchdog/kinect-watchdog.nix
     inputs.noctalia-greeter.nixosModules.default
   ];
@@ -38,6 +39,7 @@
       "systemd.show_status=false"
       "nvidia_drm.modeset=1"
       "nvidia_drm.fbdev=1"
+      "mitigations=off"
     ];
     kernelPackages = pkgs.linuxPackages_latest;
 
@@ -88,6 +90,9 @@
     enable32Bit = true;
   };
 
+  powerManagement.cpuFreqGovernor = "performance";
+
+
   # --- Unfree packages ---
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
@@ -109,7 +114,6 @@
     upower.enable = true;
     power-profiles-daemon.enable = true;
     xserver.enable = true;
-    flatpak.enable = true;
     blueman.enable = true;
     gvfs.enable = true;
     tumbler.enable = true;

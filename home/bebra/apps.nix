@@ -47,7 +47,6 @@
     qt6.qtsvg
     qt6.qtmultimedia
 
-
     # Build helpers
     meson
     autoconf
@@ -73,6 +72,9 @@
 
     # --- Music ---
     bebrasoundcloud
+
+    # --- MineCraft ---
+    prismlauncher
 
     # --- Utilities ---
     mpv
