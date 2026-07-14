@@ -21,13 +21,13 @@
     ];
   };
 
+  # Системные переменные GPU-уровня
   environment.variables = {
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     LIBVA_DRIVER_NAME = "nvidia";
     NVD_BACKEND = "direct";
-    # Fix for Electron/Chromium apps on Nvidia Wayland
-    NIXOS_OZONE_WL = "1";
-    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+    # NIXOS_OZONE_WL и ELECTRON_OZONE_PLATFORM_HINT перенесены в home.sessionVariables
+    # (это переменные уровня пользовательской сессии, а не системные)
   };
 }

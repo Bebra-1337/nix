@@ -11,6 +11,7 @@
     ./theme/gtk.nix
     ./theme/qt.nix
     ./apps.nix
+    ./services/polkit.nix
   ];
 
   home = {
@@ -32,6 +33,9 @@
     # Заставляет Java/Swing приложения (включая CLion и другие IDE JetBrains) использовать XToolkit (XWayland),
     # что убирает некорректно отрисовываемые GNOME-заголовки окон в Hyprland
     _JAVA_OPTIONS = "-Dawt.toolkit.name=XToolkit";
+    # Electron/Chromium-приложения на Nvidia Wayland (перенесены сюда из nvidia.nix)
+    NIXOS_OZONE_WL = "1";
+    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
   };
 
   # --- EasyEffects ---

@@ -10,6 +10,7 @@ hl.bind(mod .. " + B", hl.dsp.exec_cmd("uwsm app -- vivaldi"))
 hl.bind(mod .. " + A", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher"))
 hl.bind(mod .. " + C", hl.dsp.exec_cmd("uwsm app -- zeditor"))
 hl.bind(mod .. " + code:59", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher /emo"))
+hl.bind(mod .. " + code:60", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher /kao"))
 
 -- ── Window management ──
 hl.bind(mod .. " + Q", hl.dsp.window.close())

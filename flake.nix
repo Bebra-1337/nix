@@ -1,6 +1,8 @@
 {
   description = "BEBRA-PC NixOS configuration";
 
+  # nixConfig нужен для вычисления flake до установки системы (первый запуск).
+  # Те же значения есть в nix.settings в configuration.nix — для постоянной конфигурации системы.
   nixConfig = {
     extra-substituters = [
       "https://hyprland.cachix.org"
@@ -34,6 +36,8 @@
 
     bebrasoundcloud = {
       url = "git+file:///home/bebra/soundcloud-rpc";
+      # TODO: перенести на github-репо для воспроизводимости
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     noctalia = {

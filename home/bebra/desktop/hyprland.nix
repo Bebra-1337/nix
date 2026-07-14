@@ -23,9 +23,6 @@
     libnotify # notify-send CLI
     zip
 
-    # Polkit (Hypr ecosystem)
-    hyprpolkitagent
-
     # Clipboard
     cliphist
     wl-clipboard
@@ -72,19 +69,7 @@
     source = ../../../dotfiles/hypr/keybinds.lua;
     force = true;
   };
-  # hyprpolkitagent as systemd user service
-  systemd.user.services.hyprpolkitagent = {
-    Unit = {
-      Description = "Hyprland Polkit Agent";
-      After = [ "graphical-session.target" ];
-      PartOf = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
-      Restart = "on-failure";
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
-  };
+  # hyprpolkitagent перенесён в services/polkit.nix
 
   fonts.fontconfig.enable = true;
 }

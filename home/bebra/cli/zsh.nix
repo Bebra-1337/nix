@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 {
   programs.zsh = {
@@ -7,7 +7,7 @@
     syntaxHighlighting.enable = true;
     historySubstringSearch.enable = true;
     
-    dotDir = "${config.xdg.configHome}/zsh";
+    dotDir = ".config/zsh"; # относительно HOME, не абсолютный путь
     autocd = true;
     enableCompletion = true;
 
@@ -65,7 +65,6 @@
       "nrs"  = "sudo nixos-rebuild switch --flake /home/bebra/nix#BEBRA-PC";
       "nrt"  = "sudo nixos-rebuild test --flake /home/bebra/nix#BEBRA-PC";
       "nrb"  = "sudo nixos-rebuild boot --flake /home/bebra/nix#BEBRA-PC";
-      "hms"  = "home-manager switch --flake /home/bebra/nix#bebra";
       "nfu"  = "nix flake update /home/bebra/nix";
       "ngc"  = "sudo nix-collect-garbage --delete-older-than 14d";
       "nsh"  = "nix shell nixpkgs#";
@@ -111,10 +110,7 @@
       # Ctrl+Z для отмены ввода (undo) в интерактивной строке
       bindkey '^Z' undo
 
-      # fzf settings
-      export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-      export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-      export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+      # fzf настройки управляются через programs.fzf ниже
 
       # --- fzf-tab configuration ---
       # Отключаем стандартное меню автодополнения Zsh
@@ -196,5 +192,8 @@
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
+    defaultCommand = "fd --type f --hidden --follow --exclude .git";
+    fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
+    changeDirWidgetCommand = "fd --type d --hidden --follow --exclude .git";
   };
 }

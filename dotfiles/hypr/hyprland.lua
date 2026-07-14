@@ -120,6 +120,29 @@ hl.animation({ leaf = "borderangle", enabled = true, speed = 24, bezier = "liner
 --  WINDOW RULES
 -- -------------------------------------------------------
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
+
+-- Workspace 2 rules (AyuGram, Discord, SoundCloud Desktop)
+hl.window_rule({
+    match = { class = "^com\\.ayugram\\.desktop$" },
+    workspace = "2",
+    float = true,
+    size = "451 1022",
+    move = "12 46",
+})
+hl.window_rule({
+    match = { class = "^discord$" },
+    workspace = "2",
+    float = true,
+    size = "1431 504",
+    move = "477 46",
+})
+hl.window_rule({
+    match = { class = "^python3$", title = "^SoundCloud Desktop$" },
+    workspace = "2",
+    float = true,
+    size = "1431 504",
+    move = "477 564",
+})
 hl.window_rule({
     name = "deadlocked",
     match = {

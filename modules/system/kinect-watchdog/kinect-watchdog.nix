@@ -4,6 +4,7 @@ let
   kinect-watchdog = pkgs.stdenv.mkDerivation {
     name = "kinect-watchdog";
     src = ./src;
+    nativeBuildInputs = [ pkgs.gcc ];
     buildInputs = [ pkgs.libusb1 ];
     buildPhase = "gcc -Wall -Wextra -O2 -o kinect-watchdog kinect-watchdog.c -lusb-1.0";
     installPhase = "install -Dm755 kinect-watchdog $out/bin/kinect-watchdog";

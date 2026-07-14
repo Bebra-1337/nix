@@ -34,7 +34,7 @@
     lldb
     valgrind
     python3
-    ccache
+    # ccache не нужен здесь: programs.ccache.enable уже делает его доступным системно
     nil
     nixd
     # Qt libs

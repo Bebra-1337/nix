@@ -51,15 +51,26 @@
           filesystems = [
             "xdg-run/app/com.discordapp.Discord:create"
             "xdg-run/discord-ipc-0"
+            "xdg-run/pipewire-0"
           ];
         };
         Environment = {
           SDL_CAMERA_DRIVER = "pipewire";
+          SDL_AUDIO_DRIVER = "pipewire";
+          SDL_AUDIODRIVER = "pipewire";
         };
       };
 
       "io.github.Soundux" = {
+        Context = {
+          # Переключаем на Wayland — без X11 libwnck не инициализируется и не крашится
+          sockets = [ "wayland" "!x11" ];
+          filesystems = [ "xdg-run/wayland-1" ];
+        };
         Environment = {
+          GDK_BACKEND = "wayland";
+          WAYLAND_DISPLAY = "wayland-1";
+          # Adwaita содержит PNG-иконки внутри контейнера — не требует glycin-svg
           ICON_THEME = "Adwaita";
         };
       };

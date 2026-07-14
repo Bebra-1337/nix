@@ -39,7 +39,7 @@
       "systemd.show_status=false"
       "nvidia_drm.modeset=1"
       "nvidia_drm.fbdev=1"
-      "mitigations=off"
+      # "mitigations=off" # удалено: уязвимость к Spectre/Meltdown без ощутимого прироста на десктопе
     ];
     kernelPackages = pkgs.linuxPackages_latest;
 
@@ -90,7 +90,7 @@
     enable32Bit = true;
   };
 
-  powerManagement.cpuFreqGovernor = "performance";
+  # powerManagement.cpuFreqGovernor убран: power-profiles-daemon сам управляет governor'ом
 
 
   # --- Unfree packages ---
@@ -104,12 +104,12 @@
 
   # --- Services ---
   services = {
-    ollama = {
-      enable = true;
-      package = pkgs.ollama-cuda;
-    };
     openssh = {
       enable = true;
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
     };
     upower.enable = true;
     power-profiles-daemon.enable = true;
@@ -133,31 +133,6 @@
       inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     withUWSM = true;
   };
-
-  # Оверлей для бесшумного запуска UWSM при входе через greeter.
-  # Мы перехватываем запуск uwsm и, если он запущен из-под greetd, перенаправляем его вывод в /dev/null.
-  # Это сохраняет стандартную сессию без создания кастомных desktop-файлов.
-  nixpkgs.overlays = [
-    (final: prev: {
-      uwsm = prev.symlinkJoin {
-        name = "uwsm-silent-wrapper";
-        paths = [ prev.uwsm ];
-        postBuild = ''
-          rm $out/bin/uwsm
-          cat << 'EOF' > $out/bin/uwsm
-          #!/bin/sh
-          if [ -n "$GREETD_SOCK" ] && [ "$1" = "start" ]; then
-            exec ${prev.uwsm}/bin/uwsm "$@" >/dev/null 2>&1
-          else
-            exec ${prev.uwsm}/bin/uwsm "$@"
-          fi
-          EOF
-          chmod +x $out/bin/uwsm
-        '';
-        meta.mainProgram = "uwsm";
-      };
-    })
-  ];
 
   # --- Greeter ---
   programs.noctalia-greeter = {
@@ -233,7 +208,6 @@
     ffmpegthumbnailer
     poppler
     libgsf
-    ollama
   ];
 
   # --- Nix settings ---
@@ -245,10 +219,14 @@
         "flakes"
       ];
       auto-optimise-store = true;
+      # @wheel достаточно — bebra уже в группе wheel
       trusted-users = [
         "root"
-        "bebra"
+        "@wheel"
       ];
+      # Дубль с nixConfig в flake.nix намеренный:
+      # nixConfig нужен для вычисления flake до установки системы,
+      # nix.settings — постоянная конфигурация уже установленной системы.
       extra-substituters = [
         "https://hyprland.cachix.org"
         "https://noctalia.cachix.org"

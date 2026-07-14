@@ -15,12 +15,13 @@
   imports = [
     ./desktop/kitty.nix
     ./cli/zsh.nix
+    ./services/polkit.nix
   ];
 
   home = {
     username = "bebra";
     homeDirectory = "/home/bebra";
-    stateVersion = "26.05";
+    stateVersion = "26.11"; # выровняно с default.nix
   };
 
   programs.home-manager.enable = true;
@@ -32,7 +33,6 @@
 
   home.packages = with pkgs; [
     # Hyprland ecosystem minimum
-    hyprpolkitagent
     wl-clipboard
     libnotify
 
@@ -42,15 +42,7 @@
     noto-fonts-color-emoji
   ];
 
-  systemd.user.services.hyprpolkitagent = {
-    Unit = {
-      Description = "Hyprland Polkit Agent";
-      After = [ "graphical-session.target" ];
-      PartOf = [ "graphical-session.target" ];
-    };
-    Service.ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
-    Install.WantedBy = [ "graphical-session.target" ];
-  };
+  # hyprpolkitagent перенесён в services/polkit.nix
 
   fonts.fontconfig.enable = true;
 
