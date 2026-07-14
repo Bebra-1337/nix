@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   programs.zsh = {
@@ -7,7 +7,7 @@
     syntaxHighlighting.enable = true;
     historySubstringSearch.enable = true;
     
-    dotDir = ".config/zsh"; # относительно HOME, не абсолютный путь
+    dotDir = "${config.xdg.configHome}/zsh"; # абсолютный путь (относительные deprecated в HM)
     autocd = true;
     enableCompletion = true;
 
@@ -193,7 +193,7 @@
     enable = true;
     enableZshIntegration = true;
     defaultCommand = "fd --type f --hidden --follow --exclude .git";
-    fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
-    changeDirWidgetCommand = "fd --type d --hidden --follow --exclude .git";
+    fileWidget.command = "fd --type f --hidden --follow --exclude .git";
+    changeDirWidget.command = "fd --type d --hidden --follow --exclude .git";
   };
 }
