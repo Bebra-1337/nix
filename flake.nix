@@ -62,6 +62,11 @@
       url = "gitlab:lobstermane/evangelion-ui-plymouth";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

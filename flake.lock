@@ -53,6 +53,39 @@
         "url": "file:///home/bebra/soundcloud-rpc"
       }
     },
+    "bun2nix": {
+      "inputs": {
+        "flake-parts": [
+          "llm-agents",
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "llm-agents",
+          "nixpkgs"
+        ],
+        "systems": [
+          "llm-agents",
+          "systems"
+        ],
+        "treefmt-nix": [
+          "llm-agents",
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782772816,
+        "narHash": "sha256-s9BuFv0mRuZx9C1MF8qPHRdcAK14ONi0A5m6E2wqOoM=",
+        "owner": "nix-community",
+        "repo": "bun2nix",
+        "rev": "5a39d717029e94163ac223aee8d5c9946cafed1c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "bun2nix",
+        "type": "github"
+      }
+    },
     "evangelion-ui-plymouth": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -87,6 +120,27 @@
       "original": {
         "owner": "NixOS",
         "repo": "flake-compat",
+        "type": "github"
+      }
+    },
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "llm-agents",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782949081,
+        "narHash": "sha256-vp6Y/Grm98ESt6ceOkWiHWyZRDV3J1RID4w+6NWK9yA=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
         "type": "github"
       }
     },
@@ -479,6 +533,30 @@
         "type": "github"
       }
     },
+    "llm-agents": {
+      "inputs": {
+        "bun2nix": "bun2nix",
+        "flake-parts": "flake-parts",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_3",
+        "treefmt-nix": "treefmt-nix"
+      },
+      "locked": {
+        "lastModified": 1784269728,
+        "narHash": "sha256-y6VXjRhFxOvlZRk6dd5rWhSKV4s6X6k6Fas7Up4o9DI=",
+        "owner": "numtide",
+        "repo": "llm-agents.nix",
+        "rev": "dd58861b6a18526539120523960ab0ac3b455b8d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "llm-agents.nix",
+        "type": "github"
+      }
+    },
     "millennium": {
       "inputs": {
         "millennium-src": "millennium-src",
@@ -571,11 +649,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783434244,
-        "narHash": "sha256-htyNZPgi5ZfT8CpALQ7MpwU2odWNL/jifoQQ/S4WVQ4=",
+        "lastModified": 1784134779,
+        "narHash": "sha256-dERTisW7OFI/Mlefol9cDNS0wE718KgCSB3m+nU9hDs=",
         "owner": "noctalia-dev",
         "repo": "noctalia",
-        "rev": "b57faefe739b69a07199763eb98e85102c402d0b",
+        "rev": "420cb4f90e8e4da82907eef3f1ca7e24b5c2b6d8",
         "type": "github"
       },
       "original": {
@@ -591,11 +669,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783267606,
-        "narHash": "sha256-GhnfGnxzD1Fp1sbY0I2b9gNIBT298dw8ijk5s5ffZIo=",
+        "lastModified": 1783960545,
+        "narHash": "sha256-1hZOdPubaYy57amOjOzR5rMA4TZKXYGG2zbzHsS1r+0=",
         "owner": "noctalia-dev",
         "repo": "noctalia-greeter",
-        "rev": "48fc6d22b54efd62df83e3d1266feb89c291115a",
+        "rev": "b07359813e7a0cb85469c79617a25258ddc1497d",
         "type": "github"
       },
       "original": {
@@ -633,6 +711,7 @@
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
+        "llm-agents": "llm-agents",
         "millennium": "millennium",
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_2",
@@ -667,6 +746,42 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default-linux",
+        "type": "github"
+      }
+    },
+    "systems_3": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "llm-agents",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780220602,
+        "narHash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "db947814a175b7ca6ded66e21383d938df01c227",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
         "type": "github"
       }
     },

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -21,6 +21,7 @@
     zed-editor
     qtcreator
     antigravity-cli
+    inputs.llm-agents.packages.${pkgs.system}.mimo-code
     jetbrains.clion
     onlyoffice-desktopeditors
     libreoffice-qt

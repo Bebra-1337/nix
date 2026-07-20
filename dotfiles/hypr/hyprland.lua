@@ -11,8 +11,8 @@ require("keybinds")
 -- -------------------------------------------------------
 --  MONITORS
 -- -------------------------------------------------------
-hl.monitor({ output = "DP-2", mode = "1920x1080@180", position = "0x0", scale = 1 })
-hl.monitor({ output = "DP-3", disabled = true })
+hl.monitor({ output = "DP-2", mode = "2560x1440@200", position = "0x0", scale = 1 })
+hl.monitor({ output = "DP-3", mode = "1920x1080@180", position = "2560x250", scale = 1 })
 
 -- -------------------------------------------------------
 --  ENVIRONMENT
@@ -143,6 +143,7 @@ hl.window_rule({
     size = "1431 504",
     move = "477 564",
 })
+
 hl.window_rule({
     name = "deadlocked",
     match = {
@@ -150,8 +151,10 @@ hl.window_rule({
     },
     no_blur = true,
 })
+
 -- Float
 hl.window_rule({ match = { class = "^(hyprpwcenter|blueman-manager|nm-connection-editor)$" }, float = true })
+
 hl.window_rule({
     -- Fix some dragging issues with XWayland
     name     = "fix-xwayland-drags",
@@ -163,7 +166,6 @@ hl.window_rule({
         fullscreen = false,
         pin        = false,
     },
-
     no_focus = true,
 })
 
@@ -175,6 +177,30 @@ hl.window_rule({
     },
     stay_focused = true,
     no_anim = true,
+    no_initial_focus = true, -- не тянет фокус клавиатуры при открытии попапа
+    pin = true,              -- не улетает при смене воркспейса, пока попап открыт
+})
+
+-- Fix JetBrains IDE popups/dialogs (Find, Search Everywhere, context menus)
+hl.window_rule({
+    name = "jetbrains-dialogs-float",
+    match = { class = "^(jetbrains-.+)$", float = true },
+    float = true,
+})
+hl.window_rule({
+    name = "jetbrains-dialog-focus",
+    match = { class = "^(jetbrains-.*)$", float = true },
+    stay_focused = true,
+})
+hl.window_rule({
+    name = "jetbrains-tooltips",
+    match = { class = "^(jetbrains-.*)$", title = "^(win.*)$" },
+    no_initial_focus = true,
+})
+hl.window_rule({
+    name = "jetbrains-min-size",
+    match = { class = "^(jetbrains-.*)$", title = "^$", float = true },
+    min_size = "800 600",
 })
 
 -- Adapted legacy window rules
