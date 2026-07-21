@@ -126,22 +126,22 @@ hl.window_rule({
     match = { class = "^com\\.ayugram\\.desktop$" },
     workspace = "2",
     float = true,
-    size = "451 1022",
-    move = "12 46",
+    size = "451 1056",
+    move = "12 12",
 })
 hl.window_rule({
     match = { class = "^discord$" },
     workspace = "2",
     float = true,
-    size = "1431 504",
-    move = "477 46",
+    size = "1431 521",
+    move = "477 12",
 })
 hl.window_rule({
     match = { class = "^python3$", title = "^SoundCloud Desktop$" },
     workspace = "2",
     float = true,
-    size = "1431 504",
-    move = "477 564",
+    size = "1431 521",
+    move = "477 547",
 })
 
 hl.window_rule({

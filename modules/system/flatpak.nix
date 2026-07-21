@@ -52,6 +52,7 @@
             "xdg-run/app/com.discordapp.Discord:create"
             "xdg-run/discord-ipc-0"
             "xdg-run/pipewire-0"
+            "/run/udev:ro"
           ];
         };
         Environment = {

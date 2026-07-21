@@ -10,6 +10,10 @@
     extraCompatPackages = [ pkgs.proton-ge-bin ];
   };
 
+  services.udev.packages = with pkgs; [
+    game-devices-udev-rules
+  ];
+
   programs.gamemode = {
     enable = true;
     settings = {
