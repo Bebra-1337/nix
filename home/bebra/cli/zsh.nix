@@ -6,7 +6,7 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     historySubstringSearch.enable = true;
-    
+
     dotDir = "${config.xdg.configHome}/zsh"; # абсолютный путь (относительные deprecated в HM)
     autocd = true;
     enableCompletion = true;
@@ -34,63 +34,63 @@
 
     shellAliases = {
       # --- Navigation ---
-      ".."   = "cd ..";
-      "..."  = "cd ../..";
+      ".." = "cd ..";
+      "..." = "cd ../..";
       "...." = "cd ../../..";
 
       # --- ls / eza ---
-      "ls"   = "eza --icons=always --group-directories-first";
-      "ll"   = "eza -lh --icons=always --group-directories-first";
-      "la"   = "eza -lah --icons=always --group-directories-first";
-      "lt"   = "eza --tree --icons=always --level=2";
-      "lta"  = "eza --tree --icons=always --level=3 -a";
+      "ls" = "eza --icons=always --group-directories-first";
+      "ll" = "eza -lh --icons=always --group-directories-first";
+      "la" = "eza -lah --icons=always --group-directories-first";
+      "lt" = "eza --tree --icons=always --level=2";
+      "lta" = "eza --tree --icons=always --level=3 -a";
 
       # --- cat / bat ---
-      "cat"  = "bat --style=plain";
+      "cat" = "bat --style=plain";
       "catp" = "bat --paging=never";
 
       # --- Git ---
-      "g"    = "git";
-      "gs"   = "git status";
-      "ga"   = "git add";
-      "gc"   = "git commit";
-      "gp"   = "git push";
-      "gpl"  = "git pull";
-      "gd"   = "git diff";
-      "gl"   = "git log --oneline --graph --decorate";
-      "gco"  = "git checkout";
-      "gb"   = "git branch";
+      "g" = "git";
+      "gs" = "git status";
+      "ga" = "git add";
+      "gc" = "git commit";
+      "gp" = "git push";
+      "gpl" = "git pull";
+      "gd" = "git diff";
+      "gl" = "git log --oneline --graph --decorate";
+      "gco" = "git checkout";
+      "gb" = "git branch";
 
       # --- Nix ---
-      "nrs"  = "sudo nixos-rebuild switch --flake /home/bebra/nix#BEBRA-PC";
-      "nrt"  = "sudo nixos-rebuild test --flake /home/bebra/nix#BEBRA-PC";
-      "nrb"  = "sudo nixos-rebuild boot --flake /home/bebra/nix#BEBRA-PC";
-      "nfu"  = "nix flake update /home/bebra/nix";
-      "ngc"  = "sudo nix-collect-garbage --delete-older-than 14d";
-      "nsh"  = "nix shell nixpkgs#";
+      "nrs" = "sudo nixos-rebuild switch --flake /home/bebra/nix#BEBRA-PC";
+      "nrt" = "sudo nixos-rebuild test --flake /home/bebra/nix#BEBRA-PC";
+      "nrb" = "sudo nixos-rebuild boot --flake /home/bebra/nix#BEBRA-PC";
+      "nfu" = "nix flake update /home/bebra/nix";
+      "ngc" = "sudo nix-collect-garbage --delete-older-than 14d";
+      "nsh" = "nix shell nixpkgs#";
 
       # --- C/C++/Qt ---
       "cmake-init" = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON";
-      "cmake-dbg"  = "cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON";
-      "cbuild"     = "cmake --build build --parallel $(nproc)";
-      "cclean"     = "rm -rf build";
+      "cmake-dbg" = "cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON";
+      "cbuild" = "cmake --build build --parallel $(nproc)";
+      "cclean" = "rm -rf build";
 
       # --- System ---
-      "df"   = "df -h";
-      "du"   = "du -sh";
+      "df" = "df -h";
+      "du" = "du -sh";
       "free" = "free -h";
-      "top"  = "btop";
-      "ps"   = "procs";
+      "top" = "btop";
+      "ps" = "procs";
       "grep" = "grep --color=auto";
-      "rm"   = "rm -i";
-      "cp"   = "cp -i";
-      "mv"   = "mv -i";
+      "rm" = "rm -i";
+      "cp" = "cp -i";
+      "mv" = "mv -i";
       "mkdir" = "mkdir -pv";
       "ports" = "ss -tulpn";
 
       # --- Apps ---
-      "e"    = "zed";
-      "v"    = "nvim";
+      "e" = "zed";
+      "v" = "nvim";
     };
 
     initContent = ''
@@ -145,7 +145,7 @@
       # Qt/QML dev
       export QT_QPA_PLATFORM=wayland
       export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-      export QML2_IMPORT_PATH="$HOME/.local/lib/qml"
+      #export QML2_IMPORT_PATH="$HOME/.local/lib/qml"
 
       # Запуск Qt Creator в фоне с отвязкой от терминала (чтобы консоль можно было закрыть)
       qtc() {
@@ -184,8 +184,8 @@
     btop
     procs
     jq
-    tokei       # code stats
-    hyperfine   # benchmarking
+    tokei # code stats
+    hyperfine # benchmarking
   ];
 
   # --- FZF Integration ---

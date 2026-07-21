@@ -93,43 +93,4 @@
     papirus-icon-theme
     kdePackages.breeze-icons
   ];
-
-  # Default applications
-  # NOTE: vivaldi installs as "vivaldi-stable.desktop", not "vivaldi.desktop"
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      # File manager
-      "inode/directory" = [ "thunar.desktop" ];
-
-      # Browser — all relevant URL/HTML types
-      "text/html" = [ "vivaldi-stable.desktop" ];
-      "x-scheme-handler/http" = [ "vivaldi-stable.desktop" ];
-      "x-scheme-handler/https" = [ "vivaldi-stable.desktop" ];
-      "x-scheme-handler/ftp" = [ "vivaldi-stable.desktop" ];
-      "x-scheme-handler/chrome" = [ "vivaldi-stable.desktop" ];
-      "application/x-extension-htm" = [ "vivaldi-stable.desktop" ];
-      "application/x-extension-html" = [ "vivaldi-stable.desktop" ];
-      "application/xhtml+xml" = [ "vivaldi-stable.desktop" ];
-      "application/x-extension-xhtml" = [ "vivaldi-stable.desktop" ];
-      "application/x-extension-xht" = [ "vivaldi-stable.desktop" ];
-
-      # Video
-      "video/mp4" = [ "mpv.desktop" ];
-      "video/mkv" = [ "mpv.desktop" ];
-      "video/x-matroska" = [ "mpv.desktop" ];
-      "video/webm" = [ "mpv.desktop" ];
-
-      # Images
-      "image/jpeg" = [ "imv.desktop" ];
-      "image/png" = [ "imv.desktop" ];
-      "image/gif" = [ "imv.desktop" ];
-      "image/webp" = [ "imv.desktop" ];
-      "image/svg+xml" = [ "imv.desktop" ];
-    };
-  };
-
-  # mimeapps.list управляется Nix — перезаписываем принудительно,
-  # чтобы Vivaldi / другие приложения не сбрасывали настройки
-  xdg.configFile."mimeapps.list".force = true;
 }

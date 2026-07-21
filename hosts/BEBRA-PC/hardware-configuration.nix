@@ -36,6 +36,18 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
+  fileSystems."/mnt/games" =
+    { device = "/dev/disk/by-uuid/dd52490b-72c8-4c82-9b5f-85264848ed2e";
+      fsType = "ext4";
+      options = [ "nofail" ];
+    };
+
+  fileSystems."/mnt/storage" =
+    { device = "/dev/disk/by-uuid/6f630c04-fc94-4df5-bbbe-1d803c6fed4d";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "nofail" ];
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/8dea6f53-8bf2-4afc-9cb8-b673b74f44eb"; }
     ];
