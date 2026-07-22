@@ -82,6 +82,7 @@
       bebrasoundcloudOverlay = import ./overlays/bebrasoundcloud.nix { inherit inputs system; };
       mihomoOverlay = import ./overlays/mihomo.nix;
       millenniumOverlay = inputs.millennium.overlays.default;
+      davinciResolveOverlay = import ./overlays/davinci-resolve.nix;
 
       mkSystem =
         nixosModule: homeModule:
@@ -94,6 +95,7 @@
                 bebrasoundcloudOverlay
                 mihomoOverlay
                 millenniumOverlay
+                davinciResolveOverlay
               ];
             }
             ./hosts/BEBRA-PC/configuration.nix

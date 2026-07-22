@@ -1,11 +1,11 @@
 /*
  * kinect-watchdog - Kinect V1 tilt/LED daemon
  *
- * When the Kinect camera (/dev/video0) is not in use:
+ * When the Kinect camera (/dev/video*) is not in use:
  *   - Tilt motor moves to maximum UP (+31 degrees)
  *   - LED is solid RED
  *
- * When an application opens /dev/video0:
+ * When an application opens /dev/video*:
  *   - Tilt motor moves to maximum DOWN (-31 degrees)
  *   - LED blinks GREEN
  *
@@ -23,6 +23,7 @@
 #include <dirent.h>
 #include <syslog.h>
 #include <sys/stat.h>
+#include <sys/sysmacros.h>
 #include <libusb-1.0/libusb.h>
 
 /* USB IDs */
@@ -37,7 +38,7 @@
 #define K4W_CMD_LED         0x10
 #define K4W_CMD_TILT        0x803b
 
-/* K4W LED modes (different from Xbox 360!) */
+/* K4W LED modes */
 #define K4W_LED_OFF         1
 #define K4W_LED_BLINK_GREEN 2
 #define K4W_LED_SOLID_GREEN 3
@@ -54,10 +55,10 @@
 #define NUI_LED_RED         2
 #define NUI_LED_BLINK_GREEN 4
 
-#define VIDEO_DEV      "/dev/video0"
 #define POLL_INTERVAL  2  /* seconds */
 #define TILT_UP        31
 #define TILT_DOWN     -31
+#define V4L2_MAJOR_DEV 81 /* Linux V4L2 character device major number */
 
 typedef enum {
 	MODE_K4W,     /* Kinect for Windows: bulk transfers to audio device */
@@ -68,6 +69,7 @@ typedef struct {
 	libusb_device_handle *dev;
 	kinect_mode mode;
 	int tag_seq;
+	int is_connected;
 } kinect_ctx;
 
 static volatile sig_atomic_t running = 1;
@@ -76,6 +78,16 @@ static void handle_signal(int sig)
 {
 	(void)sig;
 	running = 0;
+}
+
+static void close_kinect(kinect_ctx *kctx)
+{
+	if (kctx->dev) {
+		libusb_release_interface(kctx->dev, 0);
+		libusb_close(kctx->dev);
+		kctx->dev = NULL;
+	}
+	kctx->is_connected = 0;
 }
 
 /* ---- K4W protocol (bulk transfers to audio device) ---- */
@@ -96,11 +108,14 @@ typedef struct {
 
 static int k4w_get_reply(kinect_ctx *kctx)
 {
+	if (!kctx->dev) return -1;
+
 	unsigned char buf[512];
 	int transferred = 0;
 	int ret = libusb_bulk_transfer(kctx->dev, 0x81, buf, 512, &transferred, 500);
 	if (ret != 0) {
 		syslog(LOG_WARNING, "k4w reply failed: %s", libusb_strerror(ret));
+		close_kinect(kctx);
 		return -1;
 	}
 	if (transferred < 12) {
@@ -122,6 +137,8 @@ static int k4w_get_reply(kinect_ctx *kctx)
 
 static int k4w_send_cmd(kinect_ctx *kctx, uint32_t cmd, uint32_t arg)
 {
+	if (!kctx->dev) return -1;
+
 	k4w_command c;
 	c.magic = K4W_MAGIC;
 	c.tag = kctx->tag_seq++;
@@ -136,6 +153,7 @@ static int k4w_send_cmd(kinect_ctx *kctx, uint32_t cmd, uint32_t arg)
 	int ret = libusb_bulk_transfer(kctx->dev, 0x01, buf, 20, &transferred, 500);
 	if (ret != 0) {
 		syslog(LOG_WARNING, "k4w send failed: %s", libusb_strerror(ret));
+		close_kinect(kctx);
 		return -1;
 	}
 	return k4w_get_reply(kctx);
@@ -145,6 +163,8 @@ static int k4w_send_cmd(kinect_ctx *kctx, uint32_t cmd, uint32_t arg)
 
 static int kinect_set_led(kinect_ctx *kctx, int led_on /* 1=red, 2=blink_green, 0=off */)
 {
+	if (!kctx->dev) return -1;
+
 	if (kctx->mode == MODE_K4W) {
 		uint32_t k4w_led;
 		switch (led_on) {
@@ -160,13 +180,21 @@ static int kinect_set_led(kinect_ctx *kctx, int led_on /* 1=red, 2=blink_green, 
 		case 2:  nui_led = NUI_LED_BLINK_GREEN; break;
 		default: nui_led = NUI_LED_OFF;          break;
 		}
-		return libusb_control_transfer(kctx->dev, NUI_REQ_TYPE, NUI_REQ_LED,
-		                               nui_led, 0, NULL, 0, 1000);
+		int ret = libusb_control_transfer(kctx->dev, NUI_REQ_TYPE, NUI_REQ_LED,
+		                                  nui_led, 0, NULL, 0, 1000);
+		if (ret < 0) {
+			syslog(LOG_WARNING, "nui set_led failed: %s", libusb_strerror(ret));
+			close_kinect(kctx);
+			return -1;
+		}
+		return 0;
 	}
 }
 
 static int kinect_set_tilt(kinect_ctx *kctx, int angle_degs)
 {
+	if (!kctx->dev) return -1;
+
 	if (angle_degs > 31) angle_degs = 31;
 	if (angle_degs < -31) angle_degs = -31;
 
@@ -174,14 +202,20 @@ static int kinect_set_tilt(kinect_ctx *kctx, int angle_degs)
 		return k4w_send_cmd(kctx, K4W_CMD_TILT, (uint32_t)(int32_t)angle_degs);
 	} else {
 		int16_t val = (int16_t)(angle_degs * 2);
-		return libusb_control_transfer(kctx->dev, NUI_REQ_TYPE, NUI_REQ_TILT,
-		                               (uint16_t)val, 0, NULL, 0, 1000);
+		int ret = libusb_control_transfer(kctx->dev, NUI_REQ_TYPE, NUI_REQ_TILT,
+		                                  (uint16_t)val, 0, NULL, 0, 1000);
+		if (ret < 0) {
+			syslog(LOG_WARNING, "nui set_tilt failed: %s", libusb_strerror(ret));
+			close_kinect(kctx);
+			return -1;
+		}
+		return 0;
 	}
 }
 
 /*
- * Check if /dev/video0 is opened by any process.
- * Scans /proc/<pid>/fd/ for symlinks pointing to the video device.
+ * Check if any V4L2 camera (/dev/video*) is opened by any process.
+ * Scans /proc/<pid>/fd/ for open character device file descriptors with major number 81.
  */
 static int is_camera_in_use(void)
 {
@@ -192,11 +226,6 @@ static int is_camera_in_use(void)
 	pid_t my_pid = getpid();
 	struct dirent *pid_entry;
 	char fd_dir_path[256];
-	char link_target[256];
-	struct stat video_stat;
-
-	if (stat(VIDEO_DEV, &video_stat) < 0)
-		goto not_in_use;
 
 	while ((pid_entry = readdir(proc_dir)) != NULL) {
 		char *endp;
@@ -217,21 +246,10 @@ static int is_camera_in_use(void)
 			char fd_path[512];
 			snprintf(fd_path, sizeof(fd_path), "%s/%s", fd_dir_path, fd_entry->d_name);
 
-			ssize_t len = readlink(fd_path, link_target, sizeof(link_target) - 1);
-			if (len < 0)
-				continue;
-			link_target[len] = '\0';
-
-			if (strcmp(link_target, VIDEO_DEV) == 0) {
-				closedir(fd_dir);
-				closedir(proc_dir);
-				return 1;
-			}
-
 			struct stat fd_stat;
 			if (stat(fd_path, &fd_stat) == 0 &&
 			    S_ISCHR(fd_stat.st_mode) &&
-			    fd_stat.st_rdev == video_stat.st_rdev) {
+			    major(fd_stat.st_rdev) == V4L2_MAJOR_DEV) {
 				closedir(fd_dir);
 				closedir(proc_dir);
 				return 1;
@@ -240,7 +258,6 @@ static int is_camera_in_use(void)
 		closedir(fd_dir);
 	}
 
-not_in_use:
 	closedir(proc_dir);
 	return 0;
 }
@@ -248,6 +265,8 @@ not_in_use:
 static int open_kinect(kinect_ctx *kctx)
 {
 	kctx->tag_seq = 0;
+	kctx->dev = NULL;
+	kctx->is_connected = 0;
 
 	/* Try K4W first: motor/LED via audio device */
 	kctx->dev = libusb_open_device_with_vid_pid(NULL, KINECT_VENDOR, KINECT_AUDIO_K4W);
@@ -261,6 +280,7 @@ static int open_kinect(kinect_ctx *kctx)
 			kctx->dev = NULL;
 		} else {
 			kctx->mode = MODE_K4W;
+			kctx->is_connected = 1;
 			syslog(LOG_INFO, "opened K4W audio device for motor/LED control");
 			return 0;
 		}
@@ -278,6 +298,7 @@ static int open_kinect(kinect_ctx *kctx)
 			kctx->dev = NULL;
 		} else {
 			kctx->mode = MODE_NUI;
+			kctx->is_connected = 1;
 			syslog(LOG_INFO, "opened Xbox 360 motor device for motor/LED control");
 			return 0;
 		}
@@ -306,31 +327,42 @@ int main(void)
 	}
 
 	kinect_ctx kctx;
-	if (open_kinect(&kctx) < 0) {
-		syslog(LOG_ERR, "no Kinect motor device found");
-		libusb_exit(NULL);
-		closelog();
-		return 1;
+	memset(&kctx, 0, sizeof(kctx));
+
+	if (open_kinect(&kctx) == 0) {
+		/* Initial state: tilt UP, LED RED */
+		kinect_set_tilt(&kctx, TILT_UP);
+		kinect_set_led(&kctx, 1);  /* 1 = red */
+		syslog(LOG_INFO, "idle: tilt UP, LED RED");
+	} else {
+		syslog(LOG_WARNING, "Kinect device not initially found, waiting for device...");
 	}
 
-	/* Start in idle state: tilt up, LED red */
-	int in_use = 0;
-	kinect_set_tilt(&kctx, TILT_UP);
-	kinect_set_led(&kctx, 1);  /* 1 = red */
-	syslog(LOG_INFO, "idle: tilt UP, LED RED");
+	int in_use = -1; /* force update on first iteration */
 
 	while (running) {
+		/* Attempt reconnect if device was lost */
+		if (!kctx.is_connected) {
+			if (open_kinect(&kctx) == 0) {
+				in_use = -1; /* trigger state refresh */
+			}
+		}
+
 		int now_in_use = is_camera_in_use();
 
 		if (now_in_use != in_use) {
 			in_use = now_in_use;
 			if (in_use) {
-				kinect_set_tilt(&kctx, TILT_DOWN);
-				kinect_set_led(&kctx, 2);  /* 2 = blink green */
+				if (kctx.is_connected) {
+					kinect_set_tilt(&kctx, TILT_DOWN);
+					kinect_set_led(&kctx, 2);  /* 2 = blink green */
+				}
 				syslog(LOG_INFO, "camera in use: tilt DOWN, LED BLINK GREEN");
 			} else {
-				kinect_set_tilt(&kctx, TILT_UP);
-				kinect_set_led(&kctx, 1);  /* 1 = red */
+				if (kctx.is_connected) {
+					kinect_set_tilt(&kctx, TILT_UP);
+					kinect_set_led(&kctx, 1);  /* 1 = red */
+				}
 				syslog(LOG_INFO, "camera idle: tilt UP, LED RED");
 			}
 		}
@@ -338,14 +370,15 @@ int main(void)
 		sleep(POLL_INTERVAL);
 	}
 
-	/* Clean shutdown: neutral tilt, LED off */
-	syslog(LOG_INFO, "shutting down, resetting tilt and LED");
-	kinect_set_tilt(&kctx, 0);
-	kinect_set_led(&kctx, 0);  /* 0 = off */
-	sleep(1);
+	/* Clean shutdown: neutral tilt, LED off if connected */
+	if (kctx.is_connected) {
+		syslog(LOG_INFO, "shutting down, resetting tilt and LED");
+		kinect_set_tilt(&kctx, 0);
+		kinect_set_led(&kctx, 0);  /* 0 = off */
+		sleep(1);
+		close_kinect(&kctx);
+	}
 
-	libusb_release_interface(kctx.dev, 0);
-	libusb_close(kctx.dev);
 	libusb_exit(NULL);
 
 	syslog(LOG_INFO, "stopped");

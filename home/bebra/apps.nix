@@ -67,6 +67,7 @@
     ghidra
     ida-free
     freecad-wayland
+    davinci-resolve-studio
 
     # Extra tools
     satty
