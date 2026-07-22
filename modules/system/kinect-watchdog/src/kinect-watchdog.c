@@ -370,12 +370,17 @@ int main(void)
 		sleep(POLL_INTERVAL);
 	}
 
-	/* Clean shutdown: neutral tilt, LED off if connected */
+	/* Clean shutdown: neutral tilt (0 deg), LED off */
+	syslog(LOG_INFO, "shutting down, resetting tilt to 0 and turning off LED");
+	if (!kctx.is_connected) {
+		open_kinect(&kctx);
+	}
 	if (kctx.is_connected) {
-		syslog(LOG_INFO, "shutting down, resetting tilt and LED");
 		kinect_set_tilt(&kctx, 0);
 		kinect_set_led(&kctx, 0);  /* 0 = off */
-		sleep(1);
+		usleep(200000);
+		kinect_set_tilt(&kctx, 0); /* retry once to guarantee command arrival */
+		sleep(2);                 /* wait 2 full seconds for physical motor to finish turning to 0° */
 		close_kinect(&kctx);
 	}
 

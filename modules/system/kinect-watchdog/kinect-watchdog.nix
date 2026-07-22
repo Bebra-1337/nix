@@ -53,6 +53,8 @@ in
       ExecStart = "${kinect-watchdog}/bin/kinect-watchdog";
       Restart = "on-failure";
       RestartSec = 5;
+      TimeoutStopSec = "5s";
+      KillMode = "mixed";
     };
   };
 }
