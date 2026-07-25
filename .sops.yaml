@@ -1,0 +1,8 @@
+# Configuration for sops secret encryption
+keys:
+  - &host_bebra_pc age1chsja2y7mqcs8ppvgp4g9skdv5sv8akn3v88qwlru8h9r60mesmskkh46n
+creation_rules:
+  - path_regex: secrets/secrets\.yaml$
+    key_groups:
+      - age:
+          - *host_bebra_pc

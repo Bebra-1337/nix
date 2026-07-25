@@ -40,11 +40,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784974592,
-        "narHash": "sha256-7KxPcZCtIWiF2TkkYvQU5KwesSqBpmVdlE653a+vkbA=",
+        "lastModified": 1785018352,
+        "narHash": "sha256-jyC0wMwiBpjuDRpNqGbR7y1F0hRIEeRM3QB88y+BAS4=",
         "ref": "refs/heads/main",
-        "rev": "dcbff26ff9e50926cbe764765cd9164ae3a6083c",
-        "revCount": 9,
+        "rev": "ae51eade7fdb94df11d1320a93a0cf951cfd2cc6",
+        "revCount": 10,
         "type": "git",
         "url": "file:///home/bebra/soundcloud-rpc"
       },
@@ -716,7 +716,28 @@
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia",
-        "noctalia-greeter": "noctalia-greeter"
+        "noctalia-greeter": "noctalia-greeter",
+        "sops-nix": "sops-nix"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783174389,
+        "narHash": "sha256-aCWC8ngycU7OdJrU2+Je3qf+1a2ykuBvpPhZT/9tXMc=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "f1406619a3884cd5c47992a70b8b35c9c0fcb4c9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "type": "github"
       }
     },
     "systems": {

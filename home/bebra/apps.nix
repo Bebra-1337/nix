@@ -75,10 +75,16 @@
     # --- Music ---
     bebrasoundcloud
 
+    # --- Torrents ---
+    qbittorrent
+
     # --- MineCraft ---
     prismlauncher
 
     # --- Utilities ---
+    sops
+    age
+    ssh-to-age
     mpv
     imv # image viewer (Wayland native)
     obs-studio

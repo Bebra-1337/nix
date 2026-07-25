@@ -8,6 +8,7 @@
     ../../modules/system/gaming.nix
     ../../modules/system/locale.nix
     ../../modules/system/flatpak.nix
+    ../../modules/system/sops.nix
     ../../modules/system/kinect-watchdog/kinect-watchdog.nix
     inputs.noctalia-greeter.nixosModules.default
   ];

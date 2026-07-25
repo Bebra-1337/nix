@@ -14,6 +14,24 @@
     };
   };
 
+  # --- SSH Config ---
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    settings = {
+      "github.com" = {
+        hostname = "github.com";
+        user = "git";
+        identityFile = "~/.ssh/id_github";
+      };
+      "gitlab.com" = {
+        hostname = "gitlab.com";
+        user = "git";
+        identityFile = "~/.ssh/id_gitlab";
+      };
+    };
+  };
+
   # --- direnv + nix-direnv ---
   programs.direnv = {
     enable = true;
