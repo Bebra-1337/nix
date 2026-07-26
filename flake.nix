@@ -85,7 +85,6 @@
       system = "x86_64-linux";
 
       bebrasoundcloudOverlay = import ./overlays/bebrasoundcloud.nix { inherit inputs system; };
-      mihomoOverlay = import ./overlays/mihomo.nix;
       antigravity-cliOverlay = import ./overlays/antigravity-cli.nix;
       millenniumOverlay = inputs.millennium.overlays.default;
       davinciResolveOverlay = import ./overlays/davinci-resolve.nix;
@@ -99,7 +98,6 @@
             {
               nixpkgs.overlays = [
                 bebrasoundcloudOverlay
-                mihomoOverlay
                 antigravity-cliOverlay
                 millenniumOverlay
                 davinciResolveOverlay
