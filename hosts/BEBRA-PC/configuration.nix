@@ -123,6 +123,11 @@
   # --- PAM ---
   security.pam.services.hyprlock = { };
 
+  programs.ghidra = {
+    enable = true;
+    gdb = true;
+  };
+
   # --- ccache ---
   programs.ccache.enable = true;
 
@@ -163,6 +168,7 @@
       "input"
       "plugdev"
       "libvirtd"
+      "tty"
     ];
   };
 

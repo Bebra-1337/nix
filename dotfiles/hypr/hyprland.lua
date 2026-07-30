@@ -137,7 +137,7 @@ hl.window_rule({
     move = "477 12",
 })
 hl.window_rule({
-    match = { class = "^python3$", title = "^SoundCloud Desktop$" },
+    match = { class = "^soundcloud-rpc$", title = "^SoundCloud Desktop$" },
     workspace = "2",
     float = true,
     size = "1431 521",

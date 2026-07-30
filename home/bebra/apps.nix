@@ -64,7 +64,7 @@
 
     # --- Work ---
     rustdesk-flutter
-    ghidra
+    pince
     ida-free
     freecad-wayland
     davinci-resolve-studio
