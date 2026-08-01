@@ -88,6 +88,7 @@
       antigravity-cliOverlay = import ./overlays/antigravity-cli.nix;
       millenniumOverlay = inputs.millennium.overlays.default;
       davinciResolveOverlay = import ./overlays/davinci-resolve.nix;
+      idaProOverlay = import ./overlays/ida-pro.nix;
 
       mkSystem =
         nixosModule: homeModule:
@@ -101,6 +102,7 @@
                 antigravity-cliOverlay
                 millenniumOverlay
                 davinciResolveOverlay
+                idaProOverlay
               ];
             }
             ./hosts/BEBRA-PC/configuration.nix

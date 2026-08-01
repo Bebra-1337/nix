@@ -3,10 +3,11 @@
 {
   home.packages = with pkgs; [
     # --- Browser ---
-    (vivaldi.override {
-      proprietaryCodecs = true;
-      enableWidevine = true;
-    })
+    # (vivaldi.override {
+    #   proprietaryCodecs = true;
+    #   enableWidevine = true;
+    # })
+    vivaldi
     vivaldi-ffmpeg-codecs
 
     # --- File manager ---
@@ -18,6 +19,7 @@
     file-roller # archive manager
 
     # --- IDE / Editors ---
+    ida-pro
     zed-editor
     qtcreator
     antigravity-cli
@@ -65,7 +67,6 @@
     # --- Work ---
     rustdesk-flutter
     pince
-    ida-free
     freecad-wayland
     davinci-resolve-studio
 
