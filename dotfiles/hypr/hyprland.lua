@@ -12,7 +12,7 @@ require("keybinds")
 --  MONITORS
 -- -------------------------------------------------------
 hl.monitor({ output = "DP-2", mode = "2560x1440@200", position = "0x0", scale = 1 })
-hl.monitor({ output = "DP-3", mode = "1920x1080@180", position = "2560x250", scale = 1 })
+hl.monitor({ output = "DP-3", mode = "1920x1080@180", position = "2560x212", scale = 1 })
 
 -- -------------------------------------------------------
 --  ENVIRONMENT

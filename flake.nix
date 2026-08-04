@@ -35,7 +35,7 @@
     # ── hyprcapture удален отсюда ──
 
     bebrasoundcloud = {
-      url = "git+file:///home/bebra/soundcloud-rpc";
+      url = "github:Bebra-1337/soundcloud-rpc";
       # TODO: перенести на github-репо для воспроизводимости
       inputs.nixpkgs.follows = "nixpkgs";
     };

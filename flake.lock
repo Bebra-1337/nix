@@ -40,17 +40,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1785435125,
-        "narHash": "sha256-FSopq4DVLDNHrPBh1TDxKmVeAWpfQBU4Z2SaTJkGSvA=",
-        "ref": "refs/heads/main",
-        "rev": "082794727d5d8e51f72f487f22d1c7e6c286311a",
-        "revCount": 12,
-        "type": "git",
-        "url": "file:///home/bebra/soundcloud-rpc"
+        "lastModified": 1785690829,
+        "narHash": "sha256-uJlLceQGLRa559LgVL6sIi4vi2NcE25DgYLdLi724Os=",
+        "owner": "Bebra-1337",
+        "repo": "soundcloud-rpc",
+        "rev": "67d342af85ba0fdfbdc6cf59e212d58210c6768c",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/bebra/soundcloud-rpc"
+        "owner": "Bebra-1337",
+        "repo": "soundcloud-rpc",
+        "type": "github"
       }
     },
     "bun2nix": {

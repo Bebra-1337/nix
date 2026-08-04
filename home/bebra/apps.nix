@@ -72,6 +72,7 @@
 
     # Extra tools
     satty
+    deadlock-mod-manager
 
     # --- Music ---
     bebrasoundcloud
