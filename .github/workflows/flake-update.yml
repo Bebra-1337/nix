@@ -40,7 +40,7 @@ jobs:
 
       - name: Build
         if: steps.lock_changed.outputs.changed == 'true'
-        run: nix build .#packages.x86_64-linux.default
+        run: nix build .#nixosConfigurations.BEBRA-PC.config.system.build.toplevel --accept-flake-config
 
       - name: Commit and push
         if: steps.lock_changed.outputs.changed == 'true'
