@@ -20,8 +20,11 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v14
 
+      - name: Magic Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@v9
+
       - name: nix flake update
-        run: nix flake update
+        run: nix flake update --accept-flake-config
 
       - name: Check if flake.lock changed
         id: lock_changed
