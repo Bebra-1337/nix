@@ -40,7 +40,8 @@ jobs:
 
       - name: Build
         if: steps.lock_changed.outputs.changed == 'true'
-        run: nix build .#nixosConfigurations.BEBRA-PC.config.system.build.toplevel --accept-flake-config
+        # BEBRA-PC-ci = полный default.nix, но без davinci-resolve и ida-pro (requireFile)
+        run: nix build .#nixosConfigurations.BEBRA-PC-ci.config.system.build.toplevel --accept-flake-config
 
       - name: Commit and push
         if: steps.lock_changed.outputs.changed == 'true'
