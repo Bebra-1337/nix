@@ -136,22 +136,6 @@
         BEBRA-PC =
           mkSystem ({ ... }: { }) # no extra system module needed
             (import ./home/bebra/default.nix);
-
-        # ── CI: полный конфиг, пакеты с requireFile заменены заглушками ──
-        # Используется в GitHub Actions для проверки flake update
-        BEBRA-PC-ci =
-          mkSystem
-            ({ ... }: {
-              # Перекрываем пакеты с requireFile пустыми деривациями
-              # (11GB файлы недоступны на CI-раннере)
-              nixpkgs.overlays = [
-                (final: prev: {
-                  davinci-resolve-studio = prev.runCommand "davinci-resolve-studio-ci-stub" { } "mkdir $out";
-                  ida-pro = prev.runCommand "ida-pro-ci-stub" { } "mkdir $out";
-                })
-              ];
-            })
-            (import ./home/bebra/default.nix);
       };
     };
 }
