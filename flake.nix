@@ -125,42 +125,6 @@
             }
           ];
         };
-
-      # CI-вариант: всё то же самое, но без оверлеев с requireFile
-      # (davinci-resolve-studio и ida-pro требуют локальных файлов)
-      mkSystemCI =
-        nixosModule: homeModule:
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
-          modules = [
-            {
-              nixpkgs.overlays = [
-                bebrasoundcloudOverlay
-                antigravity-cliOverlay
-                millenniumOverlay
-              ];
-            }
-            ./hosts/BEBRA-PC/configuration.nix
-            nixosModule
-            inputs.nix-flatpak.nixosModules.nix-flatpak
-            inputs.sops-nix.nixosModules.sops
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                backupFileExtension = "backup";
-                extraSpecialArgs = { inherit inputs; };
-                sharedModules = [
-                  inputs.hyprland.homeManagerModules.default
-                  inputs.noctalia.homeModules.default
-                ];
-                users.bebra = homeModule;
-              };
-            }
-          ];
-        };
     in
     {
       nixosConfigurations = {
@@ -174,10 +138,20 @@
           mkSystem ({ ... }: { }) # no extra system module needed
             (import ./home/bebra/default.nix);
 
-        # ── CI: полный конфиг без оверлеев с requireFile ──
+        # ── CI: полный конфиг, пакеты с requireFile заменены заглушками ──
         # Используется в GitHub Actions для проверки flake update
         BEBRA-PC-ci =
-          mkSystemCI ({ ... }: { })
+          mkSystem
+            ({ ... }: {
+              # Перекрываем пакеты с requireFile пустыми деривациями
+              # (11GB файлы недоступны на CI-раннере)
+              nixpkgs.overlays = [
+                (final: prev: {
+                  davinci-resolve-studio = prev.runCommand "davinci-resolve-studio-ci-stub" { } "mkdir $out";
+                  ida-pro = prev.runCommand "ida-pro-ci-stub" { } "mkdir $out";
+                })
+              ];
+            })
             (import ./home/bebra/default.nix);
       };
     };
