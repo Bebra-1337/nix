@@ -207,13 +207,11 @@
   # --- System packages ---
   # gvfs и tumbler устанавливаются автоматически через services.*.enable
   environment.systemPackages = with pkgs; [
-    git
     wget
     curl
     vim
     file
     ffmpegthumbnailer
-    poppler
     libgsf
   ];
 

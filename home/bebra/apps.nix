@@ -8,7 +8,6 @@
     #   enableWidevine = true;
     # })
     vivaldi
-    vivaldi-ffmpeg-codecs
 
     # --- File manager ---
     # thunar + plugins: installed system-level via programs.thunar
@@ -91,7 +90,6 @@
     imv # image viewer (Wayland native)
     obs-studio
     ayugram-desktop
-    kdePackages.kdeconnect-kde
 
     # --- Theme engines & GUI Tools ---
     nwg-look
