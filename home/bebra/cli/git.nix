@@ -29,6 +29,11 @@
         user = "git";
         identityFile = "~/.ssh/id_gitlab";
       };
+      "start-7.space" = {
+        hostname = "start-7.space";
+        user = "git";
+        identityFile = "~/.ssh/id_gitlab";
+      };
     };
   };
 
