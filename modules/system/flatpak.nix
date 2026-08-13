@@ -48,17 +48,24 @@
       "org.vinegarhq.Sober" = {
         Context = {
           devices = [ "all" ];
+          sockets = [ "wayland" "fallback-x11" "pulseaudio" "gamemode" ];
           filesystems = [
             "xdg-run/app/com.discordapp.Discord:create"
             "xdg-run/discord-ipc-0"
-            "xdg-run/pipewire-0"
             "/run/udev:ro"
           ];
         };
         Environment = {
-          SDL_CAMERA_DRIVER = "pipewire";
-          SDL_AUDIO_DRIVER = "pipewire";
-          SDL_AUDIODRIVER = "pipewire";
+          # Оптимизация под Xeon E5-2680 v4 (слабый однопоток) + RTX 4070
+          __GL_THREADED_OPTIMIZATIONS = "1"; # Разгрузка главного потока процессора через драйвер NVIDIA
+          __GL_SHADER_DISK_CACHE = "1"; # Дисковый кэш шейдеров для убирания микрофризов
+          __GL_SHADER_DISK_CACHE_SKIP_CLEANUP = "1";
+        };
+      };
+
+      "com.github.tchx84.Flatseal" = {
+        Context = {
+          filesystems = [ "/var/lib/flatpak/overrides:ro" ];
         };
       };
 
@@ -76,5 +83,7 @@
         };
       };
     };
+
+    update.onActivation = true;
   };
 }

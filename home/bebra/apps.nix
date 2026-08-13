@@ -17,6 +17,12 @@
     evince # document viewer
     file-roller # archive manager
 
+    # --- GameDev ---
+    godot
+    godot-mono
+    godot-mcp
+    godot-export-templates-bin
+
     # --- IDE / Editors ---
     ida-pro
     zed-editor
@@ -90,6 +96,24 @@
     imv # image viewer (Wayland native)
     obs-studio
     ayugram-desktop
+
+    # --- Noctalia Screen Toolkit ---
+    slurp
+    grim
+    hyprpicker
+    (tesseract.override {
+      enableLanguages = [
+        "eng"
+        "rus"
+      ];
+    })
+    imagemagick
+    zbar
+    ffmpeg
+    bc
+    gpu-screen-recorder
+    wl-screenrec
+    translate-shell
 
     # --- Theme engines & GUI Tools ---
     nwg-look
