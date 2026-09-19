@@ -42,6 +42,8 @@
     lldb
     valgrind
     python3
+    nodejs_22
+    pnpm
     # ccache не нужен здесь: programs.ccache.enable уже делает его доступным системно
     nil
     nixd
@@ -78,6 +80,10 @@
     # Extra tools
     satty
     deadlock-mod-manager
+    scrcpy
+    android-tools
+    sshfs
+    remmina
 
     # --- Music ---
     bebrasoundcloud

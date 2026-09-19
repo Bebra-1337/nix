@@ -23,6 +23,7 @@
   # Let home-manager manage itself
   programs.home-manager.enable = true;
 
+
   home.sessionVariables = {
     EDITOR = "zed";
     VISUAL = "zed";

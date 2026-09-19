@@ -34,6 +34,11 @@
         user = "git";
         identityFile = "~/.ssh/id_gitlab";
       };
+      "bebra" = {
+        hostname = "94.250.251.229";
+        user = "admin";
+        port = 2282;
+      };
     };
   };
 

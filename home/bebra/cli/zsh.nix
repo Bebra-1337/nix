@@ -91,9 +91,15 @@
       # --- Apps ---
       "e" = "zed";
       "v" = "nvim";
+      "dsh" = "node --expose-internals ~/.npm-global/bin/dsh";
+      "dsh-tui" = "node --expose-internals ~/.npm-global/bin/dsh --profile tui";
     };
 
     initContent = ''
+      # NPM Global packages PATH & DSH Auth Token
+      export PATH="$HOME/.npm-global/bin:$PATH"
+      export DSH_AUTH_TOKEN="bebra123"
+
       # zoxide (smarter cd)
       eval "$(zoxide init zsh)"
 

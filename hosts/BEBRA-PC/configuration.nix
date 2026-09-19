@@ -44,6 +44,13 @@
     ];
     kernelPackages = pkgs.linuxPackages_latest;
 
+    kernel.sysctl = {
+      "net.ipv6.conf.all.disable_ipv6" = 0;
+      "net.ipv6.conf.default.disable_ipv6" = 1;
+      "net.ipv6.conf.enp6s0.disable_ipv6" = 1;
+      "net.ipv6.conf.lo.disable_ipv6" = 0;
+    };
+
     plymouth = {
       enable = true;
       theme = "evangelion-ui";
@@ -56,7 +63,12 @@
   # --- Networking ---
   networking = {
     hostName = "BEBRA-PC";
-    networkmanager.enable = true;
+    # Оставляем IPv6 включенным глобально для loopback (::1), чтобы google3 бинарники не падали с SIGABRT
+    enableIPv6 = true;
+    networkmanager = {
+      enable = true;
+      dns = "systemd-resolved";
+    };
     # Открываем порты под твой конфиг (контроллер 9097 + прокси порты) + фиксим reverse path filtering для TUN
     firewall = {
       enable = true;
@@ -82,6 +94,18 @@
         7895
         7896
       ];
+    };
+  };
+
+  # --- DNS (GeoHide DoH) ---
+  services.resolved = {
+    enable = true;
+    settings = {
+      Resolve = {
+        DNS = [ "https://eu.geohide.ru/dns-query#eu.geohide.ru" ];
+        Domains = [ "~." ];
+        IPv6 = false;
+      };
     };
   };
 
@@ -118,6 +142,7 @@
         KbdInteractiveAuthentication = false;
       };
     };
+
     upower.enable = true;
     power-profiles-daemon.enable = true;
     xserver.enable = true;
@@ -183,6 +208,7 @@
       "plugdev"
       "libvirtd"
       "tty"
+      "ydotool"
     ];
   };
 
@@ -195,6 +221,7 @@
       autoStart = true;
     };
     kdeconnect.enable = true;
+    ydotool.enable = true;
     nix-ld.enable = true;
     zsh.enable = true;
     dconf.enable = true;
@@ -228,6 +255,7 @@
     ffmpegthumbnailer
     libgsf
     bluez-tools
+    ydotool
   ];
 
   # --- Nix settings ---
