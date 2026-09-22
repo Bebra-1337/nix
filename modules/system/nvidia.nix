@@ -10,7 +10,7 @@
       enable = true;
       finegrained = false;  # only for hybrid/optimus setups
     };
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];

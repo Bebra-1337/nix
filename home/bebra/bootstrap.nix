@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, username, ... }:
 
 # ── Stage 1 Bootstrap ──────────────────────────────────────────
 # Goal: get VPN running so stage 2 can pull everything else.
@@ -14,13 +14,13 @@
 {
   imports = [
     ./desktop/kitty.nix
-    ./cli/zsh.nix
+    ./cli/zsh
     ./services/polkit.nix
   ];
 
   home = {
-    username = "bebra";
-    homeDirectory = "/home/bebra";
+    inherit username;
+    homeDirectory = "/home/${username}";
     stateVersion = "26.11"; # выровняно с default.nix
   };
 

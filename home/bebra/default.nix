@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 {
   imports = [
-    ./cli/zsh.nix
+    ./cli/zsh
     ./cli/git.nix
     ./cli/fastfetch.nix
     ./desktop/hyprland.nix
@@ -10,13 +10,13 @@
     ./desktop/noctalia.nix
     ./theme/gtk.nix
     ./theme/qt.nix
-    ./apps.nix
+    ./apps
     ./services/polkit.nix
   ];
 
   home = {
-    username = "bebra";
-    homeDirectory = "/home/bebra";
+    inherit username;
+    homeDirectory = "/home/${username}";
     stateVersion = "26.11";
   };
 

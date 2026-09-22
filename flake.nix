@@ -82,6 +82,8 @@
     }:
     let
       system = "x86_64-linux";
+      username = "bebra";
+      flakeDir = "/home/bebra/nix";
 
       bebrasoundcloudOverlay = import ./overlays/bebrasoundcloud.nix { inherit inputs system; };
       antigravity-cliOverlay = import ./overlays/antigravity-cli.nix;
@@ -93,7 +95,7 @@
         nixosModule: homeModule:
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs username flakeDir; };
           modules = [
             {
               nixpkgs.overlays = [
@@ -114,7 +116,7 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "backup";
-                extraSpecialArgs = { inherit inputs; };
+                extraSpecialArgs = { inherit inputs username flakeDir; };
                 sharedModules = [
                   inputs.hyprland.homeManagerModules.default
                   inputs.noctalia.homeModules.default
