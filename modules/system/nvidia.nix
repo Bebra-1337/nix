@@ -27,7 +27,5 @@
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     LIBVA_DRIVER_NAME = "nvidia";
     NVD_BACKEND = "direct";
-    # NIXOS_OZONE_WL и ELECTRON_OZONE_PLATFORM_HINT перенесены в home.sessionVariables
-    # (это переменные уровня пользовательской сессии, а не системные)
   };
 }

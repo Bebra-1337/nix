@@ -1,8 +1,6 @@
 { ... }:
 
 {
-  # --- VPN (installed in bootstrap stage, kept here for completeness) ---
-
   imports = [
     ./browser.nix
     ./file-manager.nix

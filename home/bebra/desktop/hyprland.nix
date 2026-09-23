@@ -69,7 +69,5 @@
     source = ../../../dotfiles/hypr/keybinds.lua;
     force = true;
   };
-  # hyprpolkitagent перенесён в services/polkit.nix
-
   fonts.fontconfig.enable = true;
 }

@@ -42,8 +42,6 @@
     noto-fonts-color-emoji
   ];
 
-  # hyprpolkitagent перенесён в services/polkit.nix
-
   fonts.fontconfig.enable = true;
 
   xdg = {
