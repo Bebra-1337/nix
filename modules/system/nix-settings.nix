@@ -20,6 +20,11 @@
         "root"
         "@wheel"
       ];
+      # Не даём сборщику мусора удалять build-time зависимости (в т.ч. requireFile
+      # блобы ida-pro/davinci-resolve-studio) пока жив сам пакет — иначе после
+      # каждого nix flake update/gc их приходится добавлять в nix-store заново.
+      keep-outputs = true;
+      keep-derivations = true;
       # Дубль с nixConfig в flake.nix намеренный:
       # nixConfig нужен для вычисления flake до установки системы,
       # nix.settings — постоянная конфигурация уже установленной системы.
