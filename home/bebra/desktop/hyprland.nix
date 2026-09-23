@@ -56,18 +56,9 @@
     nerd-fonts.mononoki
   ];
 
-  # Link the native Lua configs (Hyprland >= 0.55)
-  xdg.configFile."hypr/hyprland.lua" = {
-    source = ../../../dotfiles/hypr/hyprland.lua;
-    force = true;
-  };
-  xdg.configFile."hypr/autostart.lua" = {
-    source = ../../../dotfiles/hypr/autostart.lua;
-    force = true;
-  };
-  xdg.configFile."hypr/keybinds.lua" = {
-    source = ../../../dotfiles/hypr/keybinds.lua;
-    force = true;
-  };
+  # Нативный Lua-конфиг Hyprland (hyprland.lua/autostart.lua/keybinds.lua)
+  # сознательно НЕ управляется home-manager — файлы лежат обычными (не
+  # симлинками) прямо в ~/.config/hypr/, чтобы правки применялись сразу
+  # (hyprctl reload) без пересборки/переключения home-manager.
   fonts.fontconfig.enable = true;
 }
