@@ -50,13 +50,13 @@
       # Shell integration
       shell_integration = "enabled";
 
-      # Colors — managed by Matugen templates
-      # Matugen will write to ~/.config/kitty/current-theme.conf
+      # Colors — тема генерируется noctalia (community-template "kitty"),
+      # файл ~/.config/kitty/themes/noctalia.conf пишется самой noctalia
     };
 
     extraConfig = ''
-      # Include Matugen-generated theme
-      include current-theme.conf
+      # Тема, которую генерирует noctalia
+      include themes/noctalia.conf
     '';
 
     keybindings = {
