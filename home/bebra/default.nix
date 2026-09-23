@@ -7,7 +7,9 @@
     ./cli/fastfetch.nix
     ./desktop/hyprland.nix
     ./desktop/kitty.nix
-    ./desktop/noctalia.nix
+    # ./desktop/noctalia.nix — заменено на ironbar + hyprlock/hypridle/mako/hyprpaper (см. desktop/session.nix)
+    ./desktop/walker.nix
+    ./desktop/session.nix
     ./theme/gtk.nix
     ./theme/qt.nix
     ./apps
