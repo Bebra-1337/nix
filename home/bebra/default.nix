@@ -8,7 +8,7 @@
     ./desktop/hyprland.nix
     ./desktop/kitty.nix
     # ./desktop/noctalia.nix — заменено на waybar + hyprlock/hypridle/swaync/hyprpaper (см. desktop/session.nix)
-    ./desktop/walker.nix
+    # ./desktop/walker.nix — заменено на rofi (см. desktop/rofi.nix)
     ./desktop/rofi.nix
     ./desktop/session.nix
     ./theme/gtk.nix
