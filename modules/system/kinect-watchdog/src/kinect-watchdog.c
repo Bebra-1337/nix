@@ -17,11 +17,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <syslog.h>
+#include <poll.h>
+#include <sys/inotify.h>
 #include <sys/stat.h>
 #include <sys/sysmacros.h>
 #include <libusb-1.0/libusb.h>
@@ -31,6 +34,8 @@
 #define KINECT_MOTOR_NUI    0x02b0  /* Xbox 360 Kinect motor */
 #define KINECT_MOTOR_K4W    0x02c2  /* K4W motor (USB hub) */
 #define KINECT_AUDIO_K4W    0x02bb  /* K4W audio (motor/LED ctrl) */
+#define KINECT_CAMERA_NUI   0x02ae  /* Xbox 360 Kinect camera (gspca -> /dev/video*) */
+#define KINECT_CAMERA_K4W   0x02bf  /* K4W camera */
 
 /* K4W bulk protocol */
 #define K4W_MAGIC           0x06022009
@@ -55,10 +60,11 @@
 #define NUI_LED_RED         2
 #define NUI_LED_BLINK_GREEN 4
 
-#define POLL_INTERVAL  2  /* seconds */
+#define POLL_INTERVAL  2   /* seconds: USB liveness / watch re-arm tick */
+#define RESCAN_SAFETY  30  /* seconds: forced /proc rescan if no event arrived */
+#define OPEN_SETTLE_US 100000 /* IN_OPEN fires before the fd is installed */
 #define TILT_UP        31
 #define TILT_DOWN     -31
-#define V4L2_MAJOR_DEV 81 /* Linux V4L2 character device major number */
 
 typedef enum {
 	MODE_K4W,     /* Kinect for Windows: bulk transfers to audio device */
@@ -118,14 +124,18 @@ static int k4w_get_reply(kinect_ctx *kctx)
 		close_kinect(kctx);
 		return -1;
 	}
+	/* Protocol errors desync command/reply pairing: drop the handle so the
+	 * main loop reopens the device and reapplies the current state. */
 	if (transferred < 12) {
 		syslog(LOG_WARNING, "k4w reply too short: %d bytes", transferred);
+		close_kinect(kctx);
 		return -1;
 	}
 	k4w_reply reply;
 	memcpy(&reply, buf, sizeof(reply));
 	if (reply.magic != K4W_REPLY_MAGIC) {
 		syslog(LOG_WARNING, "k4w bad reply magic: %08x", reply.magic);
+		close_kinect(kctx);
 		return -1;
 	}
 	if (reply.status != 0) {
@@ -214,11 +224,99 @@ static int kinect_set_tilt(kinect_ctx *kctx, int angle_degs)
 }
 
 /*
- * Check if any V4L2 camera (/dev/video*) is opened by any process.
- * Scans /proc/<pid>/fd/ for open character device file descriptors with major number 81.
+ * Verify the USB handle is still valid. While idle we send nothing, so an
+ * unplug or re-enumeration (e.g. firmware reload) would otherwise go
+ * unnoticed. GET_STATUS fails with NO_DEVICE once the device is gone.
+ */
+static int kinect_alive(kinect_ctx *kctx)
+{
+	unsigned char status[2];
+	int ret = libusb_control_transfer(kctx->dev, 0x80, 0x00, 0, 0,
+	                                  status, sizeof(status), 500);
+	if (ret < 0) {
+		syslog(LOG_WARNING, "kinect lost: %s", libusb_strerror(ret));
+		close_kinect(kctx);
+		return 0;
+	}
+	return 1;
+}
+
+#define MAX_KINECT_NODES 8
+
+typedef struct {
+	dev_t rdev;
+	char path[280]; /* /dev/videoN */
+} kinect_node;
+
+/*
+ * Collect the Kinect's own V4L2 nodes by walking /sys/class/video4linux/video*:
+ * the "device" link leads to the USB interface, whose parent holds
+ * idVendor/idProduct.
+ */
+static int find_kinect_video_nodes(kinect_node *nodes, int max)
+{
+	DIR *d = opendir("/sys/class/video4linux");
+	if (!d)
+		return 0;
+
+	int n = 0;
+	struct dirent *e;
+	while (n < max && (e = readdir(d)) != NULL) {
+		if (strncmp(e->d_name, "video", 5) != 0)
+			continue;
+
+		char path[512], buf[32];
+		unsigned vid = 0, pid = 0;
+		unsigned maj, min;
+		FILE *f;
+
+		snprintf(path, sizeof(path),
+		         "/sys/class/video4linux/%s/device/../idVendor", e->d_name);
+		if (!(f = fopen(path, "r")))
+			continue;
+		if (fgets(buf, sizeof(buf), f))
+			vid = strtoul(buf, NULL, 16);
+		fclose(f);
+
+		snprintf(path, sizeof(path),
+		         "/sys/class/video4linux/%s/device/../idProduct", e->d_name);
+		if (!(f = fopen(path, "r")))
+			continue;
+		if (fgets(buf, sizeof(buf), f))
+			pid = strtoul(buf, NULL, 16);
+		fclose(f);
+
+		if (vid != KINECT_VENDOR ||
+		    (pid != KINECT_CAMERA_NUI && pid != KINECT_CAMERA_K4W))
+			continue;
+
+		snprintf(path, sizeof(path),
+		         "/sys/class/video4linux/%s/dev", e->d_name);
+		if (!(f = fopen(path, "r")))
+			continue;
+		if (fscanf(f, "%u:%u", &maj, &min) == 2) {
+			nodes[n].rdev = makedev(maj, min);
+			snprintf(nodes[n].path, sizeof(nodes[n].path), "/dev/%s", e->d_name);
+			n++;
+		}
+		fclose(f);
+	}
+	closedir(d);
+	return n;
+}
+
+/*
+ * Check if the Kinect's V4L2 node is opened by any process.
+ * Scans /proc/<pid>/fd/ for character devices matching the Kinect's
+ * device numbers; other cameras are ignored.
  */
 static int is_camera_in_use(void)
 {
+	kinect_node nodes[MAX_KINECT_NODES];
+	int n_nodes = find_kinect_video_nodes(nodes, MAX_KINECT_NODES);
+	if (n_nodes == 0)
+		return 0;
+
 	DIR *proc_dir = opendir("/proc");
 	if (!proc_dir)
 		return 0;
@@ -247,12 +345,14 @@ static int is_camera_in_use(void)
 			snprintf(fd_path, sizeof(fd_path), "%s/%s", fd_dir_path, fd_entry->d_name);
 
 			struct stat fd_stat;
-			if (stat(fd_path, &fd_stat) == 0 &&
-			    S_ISCHR(fd_stat.st_mode) &&
-			    major(fd_stat.st_rdev) == V4L2_MAJOR_DEV) {
-				closedir(fd_dir);
-				closedir(proc_dir);
-				return 1;
+			if (stat(fd_path, &fd_stat) != 0 || !S_ISCHR(fd_stat.st_mode))
+				continue;
+			for (int i = 0; i < n_nodes; i++) {
+				if (fd_stat.st_rdev == nodes[i].rdev) {
+					closedir(fd_dir);
+					closedir(proc_dir);
+					return 1;
+				}
 			}
 		}
 		closedir(fd_dir);
@@ -260,6 +360,95 @@ static int is_camera_in_use(void)
 
 	closedir(proc_dir);
 	return 0;
+}
+
+/*
+ * inotify watches on the Kinect's /dev/videoN nodes. IN_OPEN / IN_CLOSE_*
+ * tell us when something touches the camera, so the expensive /proc scan
+ * only runs on demand instead of on a timer.
+ */
+typedef struct {
+	int fd;
+	int n;
+	dev_t rdev[MAX_KINECT_NODES];
+	int wd[MAX_KINECT_NODES];  /* -1 = not armed yet (node not created) */
+} cam_watch;
+
+static void watch_clear(cam_watch *w)
+{
+	for (int i = 0; i < w->n; i++)
+		if (w->wd[i] >= 0)
+			inotify_rm_watch(w->fd, w->wd[i]);
+	w->n = 0;
+}
+
+/*
+ * Re-sync watches with the current set of Kinect nodes (they vanish and
+ * reappear on replug). Returns 1 if the set changed or a watch was newly
+ * armed, meaning the caller should rescan.
+ */
+static int watch_sync(cam_watch *w)
+{
+	kinect_node nodes[MAX_KINECT_NODES];
+	int n = find_kinect_video_nodes(nodes, MAX_KINECT_NODES);
+	int changed = 0;
+
+	int same = (n == w->n);
+	for (int i = 0; same && i < n; i++)
+		if (nodes[i].rdev != w->rdev[i])
+			same = 0;
+
+	if (!same) {
+		watch_clear(w);
+		for (int i = 0; i < n; i++) {
+			w->rdev[i] = nodes[i].rdev;
+			w->wd[i] = -1;
+		}
+		w->n = n;
+		changed = 1;
+	}
+
+	for (int i = 0; i < w->n; i++) {
+		if (w->wd[i] >= 0)
+			continue;
+		int wd = inotify_add_watch(w->fd, nodes[i].path,
+		                           IN_OPEN | IN_CLOSE_WRITE | IN_CLOSE_NOWRITE);
+		if (wd >= 0) {
+			w->wd[i] = wd;
+			changed = 1;
+		}
+	}
+	return changed;
+}
+
+/*
+ * Drain queued events and update the holder count. Every open of a struct
+ * file yields exactly one IN_OPEN and, on final release, one IN_CLOSE_*, so
+ * opens minus closes is the number of live openers of the node - no /proc
+ * scan needed. Returns 1 if the count can no longer be trusted (queue
+ * overflow or a watch was dropped) and must be resynced by a scan.
+ */
+static int watch_drain(cam_watch *w, int *holders)
+{
+	char buf[4096] __attribute__((aligned(__alignof__(struct inotify_event))));
+	int untrusted = 0;
+	ssize_t len;
+
+	while ((len = read(w->fd, buf, sizeof(buf))) > 0) {
+		for (char *p = buf; p < buf + len; ) {
+			struct inotify_event *ev = (struct inotify_event *)p;
+			if (ev->mask & IN_OPEN)
+				(*holders)++;
+			if (ev->mask & (IN_CLOSE_WRITE | IN_CLOSE_NOWRITE))
+				(*holders)--;
+			if (ev->mask & (IN_Q_OVERFLOW | IN_IGNORED))
+				untrusted = 1;
+			p += sizeof(*ev) + ev->len;
+		}
+	}
+	if (*holders < 0)
+		*holders = 0;
+	return untrusted;
 }
 
 static int open_kinect(kinect_ctx *kctx)
@@ -340,18 +529,56 @@ int main(void)
 
 	int in_use = -1; /* force update on first iteration */
 
+	cam_watch watch;
+	memset(&watch, 0, sizeof(watch));
+	watch.fd = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
+	if (watch.fd < 0)
+		syslog(LOG_ERR, "inotify_init failed, falling back to timed rescans");
+
+	int need_scan = 1;   /* full /proc scan required to (re)establish truth */
+	int holders = 0;     /* opens - closes since watches were armed */
+	int idle_ticks = 0;
+
 	while (running) {
+		/* Detect unplug/re-enumeration even when idle */
+		if (kctx.is_connected)
+			kinect_alive(&kctx);
+
 		/* Attempt reconnect if device was lost */
 		if (!kctx.is_connected) {
 			if (open_kinect(&kctx) == 0) {
 				in_use = -1; /* trigger state refresh */
+				need_scan = 1;
 			}
 		}
 
-		int now_in_use = is_camera_in_use();
+		if (watch.fd >= 0 && watch_sync(&watch)) {
+			holders = 0;  /* count restarts with the new watches */
+			need_scan = 1;
+		}
 
-		if (now_in_use != in_use) {
-			in_use = now_in_use;
+		/* Without inotify, or as a safety net, rescan periodically */
+		if (watch.fd < 0 || idle_ticks * POLL_INTERVAL >= RESCAN_SAFETY)
+			need_scan = 1;
+
+		int target = holders > 0;
+
+		/* Count says free: confirm before releasing, the count may have drifted */
+		if (in_use == 1 && !target)
+			need_scan = 1;
+
+		if (need_scan) {
+			need_scan = 0;
+			idle_ticks = 0;
+			target = is_camera_in_use();
+			if (target && holders == 0)
+				holders = 1;  /* held by someone we did not see open it */
+			if (!target)
+				holders = 0;
+		}
+
+		if (target != in_use) {
+			in_use = target;
 			if (in_use) {
 				if (kctx.is_connected) {
 					kinect_set_tilt(&kctx, TILT_DOWN);
@@ -367,7 +594,26 @@ int main(void)
 			}
 		}
 
-		sleep(POLL_INTERVAL);
+		if (watch.fd >= 0) {
+			struct pollfd pfd = { .fd = watch.fd, .events = POLLIN };
+			int pr = poll(&pfd, 1, POLL_INTERVAL * 1000);
+			if (pr > 0) {
+				/* Coalesce bursts: brief probes that open and close within
+				 * the settle window never change the state. */
+				usleep(OPEN_SETTLE_US);
+				if (watch_drain(&watch, &holders))
+					need_scan = 1;
+			} else {
+				idle_ticks++;
+			}
+		} else {
+			sleep(POLL_INTERVAL);
+		}
+	}
+
+	if (watch.fd >= 0) {
+		watch_clear(&watch);
+		close(watch.fd);
 	}
 
 	/* Clean shutdown: neutral tilt (0 deg), LED off */
