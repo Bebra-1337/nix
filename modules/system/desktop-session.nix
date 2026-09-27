@@ -9,7 +9,7 @@
     withUWSM = true;
   };
 
-  programs.noctalia-greeter = {
+  services.displayManager.noctalia-greeter = {
     enable = true;
     settings = {
       keyboard = {
@@ -23,6 +23,4 @@
       };
     };
   };
-
-  security.pam.services.hyprlock = { };
 }

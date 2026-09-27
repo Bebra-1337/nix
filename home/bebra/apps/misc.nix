@@ -11,7 +11,7 @@
     remmina
 
     # --- Music ---
-    bebrasoundcloud
+    soundcloud-rpc
 
     # --- Torrents ---
     qbittorrent

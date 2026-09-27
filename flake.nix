@@ -41,7 +41,6 @@
 
     noctalia = {
       url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     noctalia-greeter = {
@@ -85,7 +84,7 @@
       username = "bebra";
       flakeDir = "/home/bebra/nix";
 
-      bebrasoundcloudOverlay = import ./overlays/bebrasoundcloud.nix { inherit inputs system; };
+      bebrasoundcloudOverlay = inputs.bebrasoundcloud.overlays.default; # даёт pkgs.soundcloud-rpc
       antigravity-cliOverlay = import ./overlays/antigravity-cli.nix;
       millenniumOverlay = inputs.millennium.overlays.default;
       davinciResolveOverlay = import ./overlays/davinci-resolve.nix;
