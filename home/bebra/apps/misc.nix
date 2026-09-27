@@ -27,8 +27,8 @@
     sops
     age
     ssh-to-age
-    mpv
-    imv # image viewer (Wayland native)
+    celluloid # GTK4-плеер на базе mpv
+    loupe # image viewer (GTK4)
     obs-studio
     ayugram-desktop
   ];
