@@ -5,10 +5,14 @@
     # Extra tools
     satty
     deadlock-mod-manager
+    remmina
+
+    # --- Phone (KDE Connect + noctalia phone-operate) ---
     scrcpy
     android-tools
     sshfs
-    remmina
+    glib # gdbus — плагин опрашивает KDE Connect по D-Bus
+    zenity # диалог выбора файла в плагине
 
     # --- Music ---
     soundcloud-rpc
