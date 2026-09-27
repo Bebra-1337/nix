@@ -31,9 +31,9 @@
     "gb" = "git branch";
 
     # --- Nix ---
-    "nrs" = "sudo nixos-rebuild switch --flake ${flakeDir}#BEBRA-PC";
-    "nrt" = "sudo nixos-rebuild test --flake ${flakeDir}#BEBRA-PC";
-    "nrb" = "sudo nixos-rebuild boot --flake ${flakeDir}#BEBRA-PC";
+    "nrs" = "nh os switch";
+    "nrt" = "nh os test";
+    "nrb" = "nh os boot";
     "nfu" = "nix flake update ${flakeDir}";
     "ngc" = "sudo nix-collect-garbage --delete-older-than 14d";
     "nsh" = "nix shell nixpkgs#";

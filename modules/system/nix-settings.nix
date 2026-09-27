@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, flakeDir, ... }:
 
 {
   # --- Unfree packages ---
@@ -37,10 +37,17 @@
         "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
       ];
     };
-    gc = {
-      automatic = true;
+  };
+
+  # nh чистит с учётом GC roots (вместо nix.gc), nom — читаемый вывод сборок
+  programs.nh = {
+    enable = true;
+    flake = flakeDir;
+    clean = {
+      enable = true;
       dates = "weekly";
-      options = "--delete-older-than 14d";
+      extraArgs = "--keep-since 14d --keep 5";
     };
   };
+  environment.systemPackages = [ pkgs.nix-output-monitor ];
 }

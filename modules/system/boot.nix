@@ -30,6 +30,7 @@
       # "mitigations=off" # удалено: уязвимость к Spectre/Meltdown без ощутимого прироста на десктопе
     ];
     kernelPackages = pkgs.linuxPackages_latest;
+    tmp.cleanOnBoot = true;
 
     plymouth = {
       enable = true;
