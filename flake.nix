@@ -65,6 +65,13 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Внутриигровой оверлей Discord (Vulkan-слой + Vencord-плагин).
+    # После коммита в ~/discord-overlay: nix flake update discord-overlay
+    discord-overlay = {
+      url = "git+file:///home/bebra/discord-overlay?ref=main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -114,6 +121,7 @@
                 sharedModules = [
                   inputs.hyprland.homeManagerModules.default
                   inputs.noctalia.homeModules.default
+                  inputs.discord-overlay.homeManagerModules.default
                 ];
                 users.bebra = homeModule;
               };

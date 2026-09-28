@@ -14,6 +14,9 @@
     glib # gdbus — плагин опрашивает KDE Connect по D-Bus
     zenity # диалог выбора файла в плагине
 
+    # --- Noctalia plugin: nix-search ---
+    nix-search-tv # поиск по nixpkgs/NixOS/Home Manager/NUR из лаунчера
+
     # --- Music ---
     soundcloud-rpc
 

@@ -1,4 +1,4 @@
-{ pkgs, flakeDir, ... }:
+{ config, pkgs, flakeDir, ... }:
 
 {
   # --- Unfree packages ---
@@ -38,6 +38,15 @@
       ];
     };
   };
+
+  # GitHub API rate-limit для nix flake update (60/ч без токена -> 5000/ч с ним).
+  # Значение — секрет из sops (modules/system/sops.nix, nix_access_tokens), сама
+  # строка "access-tokens = github.com=...", `!include` подставляет её в /etc/nix/nix.conf
+  # во время чтения конфига самим nix (а не во время сборки), так что путь в /run/secrets
+  # существует к этому моменту независимо от порядка активации.
+  nix.extraOptions = ''
+    !include ${config.sops.secrets.nix_access_tokens.path}
+  '';
 
   # nh чистит с учётом GC roots (вместо nix.gc), nom — читаемый вывод сборок
   programs.nh = {

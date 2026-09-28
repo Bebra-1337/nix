@@ -22,6 +22,16 @@
         group = "users";
         mode = "0600";
       };
+      # Полная строка nix.conf (не голый токен), т.к. подключается через
+      # `!include` в nix.extraOptions (modules/system/nix-settings.nix).
+      # owner = username, а не root: `nix flake update`, запущенный без sudo,
+      # тоже должен уметь её прочитать; root читает любой файл вне зависимости
+      # от прав, так что sudo nixos-rebuild switch это не задевает.
+      nix_access_tokens = {
+        owner = username;
+        group = "users";
+        mode = "0400";
+      };
     };
   };
 }
