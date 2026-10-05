@@ -37,6 +37,8 @@
     # Electron/Chromium-приложения на Nvidia Wayland
     NIXOS_OZONE_WL = "1";
     ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+    # Qt-приложения без нативных GNOME-подобных заголовков под Hyprland
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
   };
 
   # --- EasyEffects ---

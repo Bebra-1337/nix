@@ -54,8 +54,6 @@
     export CMAKE_GENERATOR=Ninja
 
     # Qt/QML dev
-    export QT_QPA_PLATFORM=wayland
-    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
     #export QML2_IMPORT_PATH="$HOME/.local/lib/qml"
 
     # Запуск Qt Creator в фоне с отвязкой от терминала (чтобы консоль можно было закрыть)

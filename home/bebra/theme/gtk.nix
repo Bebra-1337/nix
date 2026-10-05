@@ -20,6 +20,7 @@ in
     enable = true;
     gtk.enable = true;
     x11.enable = true;
+    hyprcursor.enable = true; # HYPRCURSOR_THEME/SIZE (раньше были в hypr/envs.lua)
     package = pkgs.bibata-cursors;
     name = "Bibata-Original-Ice";
     size = 24;
