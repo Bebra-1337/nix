@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  # --- Noctalia Screen Toolkit + bebra/snip (~/noctalia-snip) ---
+  # --- Noctalia Screen Toolkit + bebra/snip (github.com/Bebra-1337/snip) ---
   home.packages = with pkgs; [
     slurp
     grim
