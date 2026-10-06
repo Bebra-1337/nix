@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  # --- Noctalia Screen Toolkit ---
+  # --- Noctalia Screen Toolkit + bebra/snip (~/noctalia-snip) ---
   home.packages = with pkgs; [
     slurp
     grim
@@ -16,8 +16,9 @@
     zbar
     ffmpeg
     bc
-    gpu-screen-recorder
+    # gpu-screen-recorder — системный: programs.gpu-screen-recorder (modules/system/desktop-apps.nix)
     wl-screenrec
     translate-shell
+    wayfreeze # snip: заморозка экрана под меню
   ];
 }
