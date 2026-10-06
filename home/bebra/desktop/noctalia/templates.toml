@@ -1,0 +1,7 @@
+# Vivaldi: CSS-мод с палитрой noctalia.
+# Один раз: vivaldi://experiments → "Allow for using CSS modifications",
+# затем Settings → Appearance → Custom UI Modifications → ~/.local/share/noctalia/vivaldi
+# Vivaldi читает моды только при старте — после смены палитры нужен перезапуск браузера.
+[theme.templates.user.vivaldi]
+input_path    = "$XDG_CONFIG_HOME/noctalia/templates/vivaldi.css"
+output_path   = "$XDG_DATA_HOME/noctalia/vivaldi/noctalia.css"

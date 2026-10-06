@@ -7,7 +7,7 @@
     ./cli/fastfetch.nix
     ./desktop/hyprland.nix
     ./desktop/kitty.nix
-    ./desktop/noctalia.nix
+    ./desktop/noctalia
     ./theme/gtk.nix
     ./theme/qt.nix
     ./apps

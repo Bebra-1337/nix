@@ -101,7 +101,7 @@ secrets/, .sops.yaml            — sops-nix секреты (см. раздел 
 | fastfetch (баннер в терминале) | `home/bebra/cli/fastfetch.nix` |
 | Hyprland (dotfiles-конфиг, fonts) | `home/bebra/desktop/hyprland.nix` |
 | Kitty (настройки + Cyrillic-биндинги) | `home/bebra/desktop/kitty.nix` |
-| Noctalia (wayland shell) | `home/bebra/desktop/noctalia.nix` |
+| Noctalia (wayland shell) | `home/bebra/desktop/noctalia/` |
 | GTK-тема, иконки, курсор | `home/bebra/theme/gtk.nix` |
 | Qt-тема (qt6ct) | `home/bebra/theme/qt.nix` |
 | polkit-агент | `home/bebra/services/polkit.nix` |
