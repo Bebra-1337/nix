@@ -14,6 +14,7 @@
       "libvirtd"
       "tty"
       "ydotool"
+      "i2c"
     ];
   };
 

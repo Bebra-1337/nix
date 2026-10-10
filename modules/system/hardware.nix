@@ -1,10 +1,14 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
   };
+
+  # DDC/CI: управление яркостью/цветом мониторов (ddcutil, яркость в noctalia)
+  hardware.i2c.enable = true;
+  environment.systemPackages = [ pkgs.ddcutil ];
 
   hardware.bluetooth = {
     enable = true;
