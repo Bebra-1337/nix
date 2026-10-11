@@ -6,5 +6,6 @@
     pince
     freecad-wayland
     davinci-resolve-studio
+    gimp
   ];
 }
