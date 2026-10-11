@@ -1,0 +1,27 @@
+Window.SetBackgroundTopColor(0, 0, 0);
+Window.SetBackgroundBottomColor(0, 0, 0);
+
+frames = 202;
+for (i = 1; i <= frames; i++)
+  image[i] = Image("image-" + i + ".png");
+
+# Кадры 720x480 — вписываем в экран с сохранением пропорций.
+# Масштабируем по одному кадру за раз: все 202 заранее заняли бы ~1.5 ГБ RAM.
+scale = Math.Min(Window.GetWidth() / image[1].GetWidth(), Window.GetHeight() / image[1].GetHeight());
+w = Math.Int(image[1].GetWidth() * scale);
+h = Math.Int(image[1].GetHeight() * scale);
+
+sprite = Sprite();
+sprite.SetPosition(Window.GetX() + Math.Int((Window.GetWidth() - w) / 2), Window.GetY() + Math.Int((Window.GetHeight() - h) / 2), 0);
+
+index = 1;
+fun boot_callback()
+{
+  sprite.SetImage(image[index].Scale(w, h));
+  index++;
+  if (index > frames)
+    index = 1;
+}
+
+Plymouth.SetRefreshFunction(boot_callback);
+Plymouth.SetQuitFunction(boot_callback);

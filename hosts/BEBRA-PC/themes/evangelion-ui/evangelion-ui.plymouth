@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=evangelion-ui
+Description=Neon Genesis Evangelion UI
+ModuleName=script
+
+[script]
+ImageDir=EVANGELION_UI_PATH/share/plymouth/themes/evangelion-ui
+ScriptFile=EVANGELION_UI_PATH/share/plymouth/themes/evangelion-ui/evangelion-ui.script

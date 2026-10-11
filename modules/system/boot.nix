@@ -1,5 +1,21 @@
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 
+let
+  # Форк gitlab:lobstermane/evangelion-ui-plymouth: кадры масштабируются под экран
+  evangelion-ui-plymouth = pkgs.stdenvNoCC.mkDerivation {
+    pname = "evangelion-ui-plymouth";
+    version = "1.1";
+    src = ../../hosts/BEBRA-PC/themes/evangelion-ui;
+    installPhase = ''
+      dir=$out/share/plymouth/themes/evangelion-ui
+      mkdir -p $dir
+      cp evangelion-ui.script $dir/
+      tar -xzf images.tar.gz -C $dir/
+      substitute evangelion-ui.plymouth $dir/evangelion-ui.plymouth \
+        --replace-fail "EVANGELION_UI_PATH" "$out"
+    '';
+  };
+in
 {
   boot = {
     consoleLogLevel = 0;
@@ -49,9 +65,7 @@
     plymouth = {
       enable = true;
       theme = "evangelion-ui";
-      themePackages = [
-        inputs.evangelion-ui-plymouth.packages.${pkgs.stdenv.hostPlatform.system}.default
-      ];
+      themePackages = [ evangelion-ui-plymouth ];
     };
   };
 
