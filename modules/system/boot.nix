@@ -92,4 +92,63 @@ in
       done
     '';
   };
+
+  # NVMe отвалился 11.10 даже без ASPM: ядро отдаёт EIO, D-state нет → hung_task_panic молчит,
+  # система часами живёт без корня, журнал (на том же NVMe) пуст. Поэтому:
+  #  1) пишем /dev/kmsg на /mnt/storage (отдельный SATA HDD);
+  #  2) если nvme0 не live или прямое чтение не проходит 30 с подряд → sysrq-c → pstore + ребут.
+  # Всё крутится из статического busybox в /run (tmpfs), чтобы не нужен был ни один файл с NVMe.
+  systemd.services.nvme-watchdog =
+    let
+      main = pkgs.writeText "nvme-watchdog.sh" ''
+        export PATH=/run/nvme-watch/bin
+        dir=/mnt/storage/kmsg
+        log=
+        if mkdir -p $dir; then
+          log=$dir/$(date +%F_%H-%M-%S).log
+          echo "# boot_id $(cat /proc/sys/kernel/random/boot_id), $(date '+%F %T %z'), uptime $(cut -d' ' -f1 /proc/uptime) s" >> $log
+          ls -1t $dir/*.log | tail -n +61 | xargs -r rm -f
+          # cat падает с EPIPE, если буфер kmsg переполнился, — просто переоткрываем
+          ( while :; do cat /dev/kmsg >> $log; sleep 1; done ) &
+        fi
+
+        fails=0
+        while :; do
+          state=$(cat /sys/class/nvme/nvme0/state 2>/dev/null)
+          if [ "$state" = live ] && dd if=/dev/nvme0n1 of=/dev/null bs=4096 count=1 iflag=direct 2>/dev/null; then
+            fails=0
+          else
+            fails=$((fails + 1))
+            echo "<2>nvme-watchdog: nvme0 state=''${state:-gone}, check failed ($fails/6)" > /dev/kmsg
+            if [ $fails -ge 6 ]; then
+              echo "<0>nvme-watchdog: NVMe lost, forcing panic for pstore" > /dev/kmsg
+              [ -n "$log" ] && sync -f $log &
+              sleep 3
+              echo c > /proc/sysrq-trigger
+            fi
+          fi
+          sleep 5
+        done
+      '';
+      setup = pkgs.writeShellScript "nvme-watchdog-setup" ''
+        d=/run/nvme-watch
+        ${pkgs.coreutils}/bin/install -Dm755 ${pkgs.pkgsStatic.busybox}/bin/busybox $d/bin/busybox
+        $d/bin/busybox --install -s $d/bin
+        ${pkgs.coreutils}/bin/install -m644 ${main} $d/main.sh
+      '';
+    in
+    {
+      description = "Log kmsg to /mnt/storage and panic if NVMe drops out";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "mnt-storage.mount" ];
+      after = [ "mnt-storage.mount" ];
+      serviceConfig = {
+        ExecStartPre = setup;
+        ExecStart = "/run/nvme-watch/bin/busybox sh /run/nvme-watch/main.sh";
+        RuntimeDirectory = "nvme-watch";
+        Restart = "always";
+        RestartSec = 5;
+        OOMScoreAdjust = -1000;
+      };
+    };
 }
