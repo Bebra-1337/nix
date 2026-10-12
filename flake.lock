@@ -40,11 +40,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791548759,
-        "narHash": "sha256-ApL3KCHUejoTsvXLwga+tuc3CFFtKCf1WUgh1Az70BE=",
+        "lastModified": 1791775389,
+        "narHash": "sha256-gxfKqpSrcSjAbf/XdibbYgR63L7wZcI2X5a3mE4WPFE=",
         "owner": "Bebra-1337",
         "repo": "soundcloud-rpc",
-        "rev": "9cfb33e63f84b04d91e72ddc62ca88d6b67061f3",
+        "rev": "73b3171c891aad31f846c5dc3c85e793ed816292",
         "type": "github"
       },
       "original": {

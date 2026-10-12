@@ -15,6 +15,12 @@
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
 
+  # Realtime priority for audio apps that set it directly (sfizz in SoundCraft)
+  security.pam.loginLimits = [
+    { domain = "@audio"; item = "rtprio";  type = "-"; value = "95"; }
+    { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
+  ];
+
   environment.systemPackages = with pkgs; [
     pwvucontrol
   ];
