@@ -67,6 +67,13 @@
       url = "git+file:///home/bebra/discord-overlay?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Soundboard: звуки в микрофон в обход EasyEffects (PipeWire).
+    # После коммита в ~/Projects/soundpad: nix flake update soundpad
+    soundpad = {
+      url = "git+file:///home/bebra/Projects/soundpad?ref=main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -82,6 +89,7 @@
       flakeDir = "/home/bebra/nix";
 
       bebrasoundcloudOverlay = inputs.bebrasoundcloud.overlays.default; # даёт pkgs.soundcloud-rpc
+      soundpadOverlay = inputs.soundpad.overlays.default; # даёт pkgs.soundpad
       antigravity-cliOverlay = import ./overlays/antigravity-cli.nix;
       millenniumOverlay = inputs.millennium.overlays.default;
       davinciResolveOverlay = import ./overlays/davinci-resolve.nix;
@@ -96,6 +104,7 @@
             {
               nixpkgs.overlays = [
                 bebrasoundcloudOverlay
+                soundpadOverlay
                 antigravity-cliOverlay
                 millenniumOverlay
                 davinciResolveOverlay

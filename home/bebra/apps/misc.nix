@@ -20,6 +20,9 @@
     # --- Music ---
     soundcloud-rpc
 
+    # --- Soundboard ---
+    soundpad
+
     # --- Torrents ---
     qbittorrent
 
