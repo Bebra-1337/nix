@@ -10,7 +10,8 @@
       enable = true;
       finegrained = false;  # only for hybrid/optimus setups
     };
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
+    # stable, not latest: the 615 feature branch kept breaking things
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
