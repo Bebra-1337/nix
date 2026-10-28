@@ -28,7 +28,7 @@
 
   environment.systemPackages = with pkgs; [
     mangohud
-    lutris
+    #lutris
     heroic
     wine-staging
     winetricks

@@ -3,7 +3,7 @@
 {
   home.packages = with pkgs; [
     rustdesk-flutter
-    pince
+    #pince
     freecad-wayland
     davinci-resolve-studio
     gimp
